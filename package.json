@@ -16,12 +16,14 @@
   "dependencies": {
     "@react-google-maps/api": "^2.20.8",
     "@tabler/icons-react": "^3.36.1",
+    "@types/three": "^0.183.1",
     "clsx": "^2.1.1",
     "motion": "^12.31.0",
     "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "three": "^0.183.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",

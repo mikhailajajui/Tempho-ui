@@ -4,19 +4,36 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./LandlordHeroSection.module.css";
+import { PensioGlobalGlobe } from "./PensioGlobalGlobe";
 
 type TrustStat = {
   value: string;
   label: string;
 };
 
+type PackageHero = {
+  label: string;
+  value: string;
+  description: string;
+};
+
+type PackageBenefit = {
+  label: string;
+  value?: string;
+  description: string;
+};
+
 type PresentationSlide = {
   id: string;
   headline: string;
   subheadline?: string;
+  variant?: "default" | "package" | "global";
+  eyebrow?: string;
   isHero?: boolean;
   showCta?: boolean;
   trustStats?: TrustStat[];
+  packageHero?: PackageHero;
+  packageBenefits?: PackageBenefit[];
 };
 
 type LandlordHeroSectionProps = {
@@ -79,6 +96,86 @@ function renderHeroHeadline(headline: string) {
   });
 }
 
+function renderPackageHeadline(headline: string) {
+  const match = headline.match(/^(.*?)(\s+Guarantee)(\s+Package)?$/);
+
+  if (!match) {
+    return headline;
+  }
+
+  const [, leadText, highlightedWord, trailingText = ""] = match;
+
+  return (
+    <>
+      {leadText}
+      <span className={styles.packageHeadlineAccent}>{highlightedWord}</span>
+      {trailingText}
+    </>
+  );
+}
+
+function renderGlobalHeadline(headline: string) {
+  const match = headline.match(/^(.*?)(\s+Global)$/);
+
+  if (!match) {
+    return headline;
+  }
+
+  const [, leadText, highlightedWord] = match;
+
+  return (
+    <>
+      {leadText}
+      <span className={styles.packageHeadlineAccent}>{highlightedWord}</span>
+    </>
+  );
+}
+
+function ShieldIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 3l7 3.2v5.4c0 4.4-2.6 8.4-7 10.4-4.4-2-7-6-7-10.4V6.2L12 3z" />
+      <path d="M9 12.2l2 2 4-4.2" />
+    </svg>
+  );
+}
+
+function BoltIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M13 2L5 14h5l-1 8 8-12h-5l1-8z" />
+    </svg>
+  );
+}
+
+function HomeShieldIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 11.2L12 4l9 7.2" />
+      <path d="M5.5 9.8V20h13V9.8" />
+      <path d="M12 10.5l3 1.4v2.5c0 2.1-1.2 4-3 5-1.8-1-3-2.9-3-5v-2.5l3-1.4z" />
+    </svg>
+  );
+}
+
+function ScaleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 4v16" />
+      <path d="M7 7h10" />
+      <path d="M5 7l-2.5 4.5a2.7 2.7 0 0 0 5 0L5 7z" />
+      <path d="M19 7l-2.5 4.5a2.7 2.7 0 0 0 5 0L19 7z" />
+      <path d="M8 20h8" />
+    </svg>
+  );
+}
+
+function renderPackageIcon(index: number) {
+  if (index === 0) return <BoltIcon />;
+  if (index === 1) return <HomeShieldIcon />;
+  return <ScaleIcon />;
+}
+
 const defaultSlides: PresentationSlide[] = [
   {
     id: "intro",
@@ -94,13 +191,37 @@ const defaultSlides: PresentationSlide[] = [
   },
   {
     id: "feature-1",
-    headline: "AI-Powered Tenant Matching",
-    subheadline: "Our intelligent system finds tenants that match your property requirements perfectly.",
+    variant: "package",
+    eyebrow: "Protection package",
+    headline: "Pension Rent Guarantee",
+    packageHero: {
+      label: "Rent Guarantee",
+      value: "$60,000",
+      description: "Up to $5,000/month paid for 12 months.",
+    },
+    packageBenefits: [
+      {
+        label: "Same-month settlement",
+        description: "Fast payout support when an eligible rent issue arises.",
+      },
+      {
+        label: "Damage claim",
+        value: "$10,000",
+        description: "Coverage support for qualifying damage-related claims.",
+      },
+      {
+        label: "Legal support",
+        value: "$1,500",
+        description: "Practical help for eligible tenancy-related legal needs.",
+      },
+    ],
   },
   {
     id: "feature-2",
-    headline: "Guaranteed Rent Protection",
-    subheadline: "Never worry about missed payments. We ensure your rent arrives on time, every time.",
+    variant: "global",
+    eyebrow: "Why Tempho!",
+    headline: "Pensio Global",
+    subheadline: "$1.5+ Billion in Rent Risk solutions delivered to landlords, and other stakeholders.",
   },
   {
     id: "feature-3",
@@ -436,6 +557,105 @@ export function LandlordHeroSection({
                       </div>
                     ))}
                   </div>
+                </div>
+              </div>
+            ) : slide.variant === "package" &&
+              slide.packageHero &&
+              slide.packageBenefits ? (
+              <div className={styles.packageSlideContent}>
+                <div className={styles.packageHeader}>
+                  <div className={styles.slideNumber}>
+                    <span>0{index + 1}</span>
+                  </div>
+                  {slide.eyebrow && <p className={styles.packageEyebrow}>{slide.eyebrow}</p>}
+                  <h2 className={styles.packageHeadline}>{renderPackageHeadline(slide.headline)}</h2>
+                  <p className={styles.packageIntro}>
+                    A coverage-first package designed to keep landlord income calm,
+                    predictable, and protected.
+                  </p>
+                </div>
+
+                <div className={styles.packageGrid}>
+                  <article className={`${styles.packageCard} ${styles.packageHeroCard}`}>
+                    <div className={styles.packageHeroWatermark} aria-hidden="true">
+                      <ShieldIcon />
+                    </div>
+                    <div className={styles.packageHeroTop}>
+                      <div className={styles.packageIconWrap}>
+                        <ShieldIcon />
+                      </div>
+                      <span className={styles.packageHeroPill}>12 month protection</span>
+                    </div>
+                    <p className={styles.packageLabel}>{slide.packageHero.label}</p>
+                    <p className={styles.packageHeroValue}>{slide.packageHero.value}</p>
+                    <p className={styles.packageHeroDescription}>{slide.packageHero.description}</p>
+                    <div className={styles.packageFormulaBlock}>
+                      <span className={styles.packageFormulaLabel}>Coverage formula</span>
+                      <span className={styles.packageFormulaValue}>Up to $5,000 x 12 months</span>
+                    </div>
+                  </article>
+
+                  {slide.packageBenefits.map((benefit, benefitIndex) => (
+                    <article key={benefit.label} className={`${styles.packageCard} ${styles.packageBenefitCard}`}>
+                      <div className={styles.packageBenefitTop}>
+                        <div className={styles.packageIconWrapSmall}>{renderPackageIcon(benefitIndex)}</div>
+                      </div>
+                      <p className={styles.packageLabel}>{benefit.label}</p>
+                      {benefit.value && <p className={styles.packageBenefitValue}>{benefit.value}</p>}
+                      <p className={styles.packageBenefitDescription}>{benefit.description}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            ) : slide.variant === "global" ? (
+              <div className={styles.globalSlideContent}>
+                <div className={styles.globalTextColumn}>
+                  <div className={styles.packageHeader}>
+                    <div className={styles.slideNumber}>
+                      <span>0{index + 1}</span>
+                    </div>
+                    {slide.eyebrow && <p className={styles.packageEyebrow}>{slide.eyebrow}</p>}
+                    <h2 className={styles.packageHeadline}>{renderGlobalHeadline(slide.headline)}</h2>
+                    <p className={styles.packageIntro}>
+                      A worldwide rent-risk solution built to support landlords,
+                      property groups, and stakeholders through one connected protection network.
+                    </p>
+                  </div>
+
+                  <div className={styles.globalAudienceRow}>
+                    <span className={styles.globalAudienceChip}>Landlords</span>
+                    <span className={styles.globalAudienceChip}>Property groups</span>
+                    <span className={styles.globalAudienceChip}>Stakeholders</span>
+                  </div>
+                </div>
+
+                <div className={styles.globalVisualColumn}>
+                  <div className={styles.globalGlobeStage}>
+                    <div className={styles.globalStageHalo} aria-hidden="true" />
+                    <div className={styles.globalStagePanel}>
+                      <div className={styles.globalStageOrbit} aria-hidden="true" />
+
+                      <div className={`${styles.globalMetricCard} ${styles.globalMetricCardFloating}`}>
+                        <p className={styles.globalMetricLabel}>Global proof point</p>
+                        <p className={styles.globalMetricValue}>$1.5B+</p>
+                        <div className={styles.globalMetricDescriptionList}>
+                          <p className={styles.globalMetricDescription}>Landlords</p>
+                          <p className={styles.globalMetricDescription}>Portfolios</p>
+                          <p className={styles.globalMetricDescription}>Property stakeholders</p>
+                        </div>
+                      </div>
+
+                      <div className={styles.globalGlobeFrame}>
+                        <PensioGlobalGlobe className={styles.globalGlobeCanvasShell} />
+                      </div>
+                    </div>
+
+                    <div className={`${styles.globalGlobeHud} ${styles.globalGlobeHudFloating}`}>
+                      <span className={styles.globalGlobeHudLabel}>Coverage reach</span>
+                      <span className={styles.globalGlobeHudValue}>6 continents</span>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             ) : (

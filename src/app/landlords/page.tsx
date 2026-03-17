@@ -39,13 +39,37 @@ export default function LandlordsPage() {
           },
           {
             id: "feature-1",
-            headline: "AI-Powered Tenant Matching",
-            subheadline: "Our intelligent system finds tenants that match your property requirements perfectly.",
+            variant: "package",
+            eyebrow: "Why Tempho!",
+            headline: "Pension Rent Guarantee",
+            packageHero: {
+              label: "Rent Guarantee",
+              value: "$60,000",
+              description: "Up to $5,000/month paid for 12 months.",
+            },
+            packageBenefits: [
+              {
+                label: "Damage claim",
+                value: "$10,000",
+                description: "Coverage support for qualifying damage-related claims.",
+              },
+              {
+                label: "Legal support",
+                value: "$1,500",
+                description: "Practical help for eligible tenancy-related legal needs.",
+              },
+              {
+                label: "Same-month settlement",
+                description: "Fast payout support when an eligible rent issue arises.",
+              },
+            ],
           },
           {
             id: "feature-2",
-            headline: "Guaranteed Rent Protection",
-            subheadline: "Never worry about missed payments. We ensure your rent arrives on time, every time.",
+            variant: "global",
+            eyebrow: "Why Tempho!",
+            headline: "Pensio Global",
+            subheadline: "$1.5B+ in rent risk solutions delivered to landlords and other stakeholders.",
           },
           {
             id: "feature-3",
