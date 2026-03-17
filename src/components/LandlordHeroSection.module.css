@@ -1,0 +1,1061 @@
+/* LandlordHeroSection - Presentation Style Scroll Layout */
+
+/* CSS Variables */
+:global(:root) {
+  --ink-900: #0f172a;
+  --ink-700: #334155;
+  --ink-500: #64748b;
+  --ink-300: #cbd5e1;
+  --yellow-cta: #FFD55A;
+}
+
+/* =====================
+   MAIN CONTAINER
+   ===================== */
+.heroContainer {
+  position: relative;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+/* =====================
+   VIDEO WRAPPER - MORPHING STATE
+   ===================== */
+.videoWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh; /* dvh = dynamic viewport height, fixes mobile browser chrome jump */
+  z-index: 50;
+  overflow: hidden;
+  background-color: #0f172a;
+  transition: 
+    top 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    left 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.videoWrapper.minimized {
+  top: auto;
+  bottom: 24px;
+  left: auto;
+  right: 24px;
+  width: 360px;
+  height: 203px; /* 16:9 aspect ratio */
+  border-radius: 16px;
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.25),
+    0 10px 20px rgba(0, 0, 0, 0.15);
+  border: 3px solid rgba(255, 255, 255, 0.95);
+}
+
+/* Mobile/Tablet: Bottom bar instead of corner */
+.videoWrapper.minimizedBar {
+  top: auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 88px;
+  border-radius: 0;
+  border: none;
+  border-top: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* show full video frame — no cropping, black bars fill empty space */
+}
+
+/* Video positioning in bar mode — show upper-centre of frame */
+.minimizedBar .video {
+  object-position: center 30%;
+}
+
+/* =====================
+   VIDEO SPACER
+   ===================== */
+.videoSpacer {
+  height: 100dvh; /* matches videoWrapper height */
+  width: 100%;
+}
+/* =====================
+   VIDEO CONTROLS
+   ===================== */
+.videoControls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  z-index: 60;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.minimized .videoControls {
+  bottom: 12px;
+  right: 12px;
+  gap: 6px;
+}
+
+/* Controls in bar mode — positioned on left side */
+.minimizedBar .videoControls {
+  bottom: 50%;
+  transform: translateY(50%);
+  right: auto;
+  left: 16px;
+  gap: 8px;
+}
+
+.minimizedBar .controlButton {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.minimizedBar .controlButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.controlButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #0f172a;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.minimized .controlButton {
+  width: 36px;
+  height: 36px;
+}
+
+.minimized .controlButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.controlButton:hover {
+  transform: scale(1.08);
+  background-color: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.controlButton:focus-visible {
+  outline: 3px solid var(--yellow-cta);
+  outline-offset: 2px;
+}
+
+/* =====================
+   UNMUTE PROMPT
+   ===================== */
+.unmutePrompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 32px;
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  cursor: pointer;
+  color: #ffffff;
+  z-index: 70;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.unmutePrompt:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.unmutePrompt:focus-visible {
+  outline: 3px solid var(--yellow-cta);
+  outline-offset: 2px;
+}
+
+.unmuteIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background-color: var(--yellow-cta);
+  border-radius: 50%;
+  color: #0f172a;
+}
+
+.unmuteText {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* =====================
+   PLAY OVERLAY
+   ===================== */
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+  cursor: pointer;
+  z-index: 65;
+  transition: background-color 0.2s ease;
+}
+
+.playOverlay:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.playOverlay:focus-visible {
+  outline: 3px solid var(--yellow-cta);
+  outline-offset: -3px;
+}
+
+.playButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background-color: var(--yellow-cta);
+  border-radius: 50%;
+  color: #0f172a;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 30px rgba(255, 213, 90, 0.4);
+}
+
+.playOverlay:hover .playButton {
+  transform: scale(1.1);
+  box-shadow: 0 15px 40px rgba(255, 213, 90, 0.5);
+}
+
+/* =====================
+   HERO OVERLAY - SEPARATE FIXED LAYER
+   (outside videoWrapper so it never gets clipped when video shrinks)
+   ===================== */
+.heroOverlay {
+  position: fixed;
+  inset: 0;
+  /* subtle dark vignette so scroll indicator is readable */
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  z-index: 55;
+  pointer-events: none; /* let clicks pass through to video controls */
+  opacity: 1;
+  transition: opacity 0.4s ease-out;
+}
+
+/* allow the unmute button inside to receive clicks */
+.heroOverlay button {
+  pointer-events: auto;
+}
+
+.heroOverlay.heroOverlayHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Scroll Indicator – pinned to the bottom centre */
+.scrollIndicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.scrollText {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.scrollArrow {
+  color: rgba(255, 255, 255, 0.85);
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(8px);
+  }
+  60% {
+    transform: translateY(4px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) translateX(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* scrollIndicator uses its own translateX(-50%), so override the keyframe */
+.scrollIndicator {
+  animation: fadeInUpCenter 0.8s ease-out 0.4s both;
+}
+
+@keyframes fadeInUpCenter {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* =====================
+   SLIDES CONTAINER
+   ===================== */
+.slidesContainer {
+  position: relative;
+  z-index: 40;
+  background-color: #ffffff;
+}
+
+.slide {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  /* right padding reserves space so text never overlaps the corner video */
+  padding: 80px 420px 80px 80px;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.slide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--ink-300),
+    transparent
+  );
+}
+
+.slideContent {
+  max-width: 660px;
+  opacity: 0.25;
+  transform: translateY(50px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.slide.active .slideContent {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide Number */
+.slideNumber {
+  margin-bottom: 24px;
+}
+
+.slideNumber span {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-900);
+  background-color: var(--yellow-cta);
+  padding: 8px 20px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+}
+
+/* Slide Headlines */
+.slideHeadline {
+  font-family: "Abril Fatface", cursive;
+  font-size: clamp(32px, 4.5vw, 56px);
+  font-weight: 400;
+  line-height: 1.15;
+  white-space: pre-line;
+  color: var(--ink-900);
+  margin: 0 0 20px;
+}
+
+.slideSubheadline {
+  font-family: "Lora", serif;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--ink-700);
+  margin: 0;
+  max-width: 550px;
+}
+
+/* Slide CTA */
+.slideCta {
+  margin-top: 48px;
+}
+
+.ctaButton {
+  display: inline-block;
+  padding: 20px 56px;
+  font-family: "Lora", serif;
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 600;
+  color: var(--ink-900);
+  background-color: var(--yellow-cta);
+  text-decoration: none;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(255, 213, 90, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaButton::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: skewX(-25deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.ctaButton:hover::before {
+  left: 150%;
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(255, 213, 90, 0.4);
+}
+
+.ctaButton:focus-visible {
+  outline: 3px solid var(--ink-900);
+  outline-offset: 3px;
+}
+
+/* =====================
+   HERO SLIDE - First slide with CTA, stats, and visual
+   ===================== */
+.heroSlide {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 213, 90, 0.08) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 213, 90, 0.05) 100%
+  );
+  padding: 100px 80px 100px 80px;
+}
+
+.heroSlide::before {
+  display: none; /* Remove the divider line for hero slide */
+}
+
+.heroSlideInner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  opacity: 0.25;
+  transform: translateY(50px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.heroSlide.active .heroSlideInner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heroSlideContent {
+  max-width: 600px;
+}
+
+.heroSlideEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-700);
+  opacity: 0;
+  transform: translateY(12px);
+  animation: heroEyebrowReveal 0.55s ease forwards;
+  animation-delay: 0.08s;
+}
+
+.heroSlideEyebrow::before {
+  content: "";
+  width: 42px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffcf52 0%, #f4a300 100%);
+  box-shadow: 0 6px 18px rgba(255, 213, 90, 0.22);
+}
+
+.heroSlideHeadline {
+  font-family: "Abril Fatface", cursive;
+  font-size: clamp(32px, 4.2vw, 54px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--ink-900);
+  margin: 0 0 24px;
+}
+
+.heroHeadlineLine {
+  display: block;
+  width: fit-content;
+  opacity: 0;
+  transform: translateY(22px);
+  animation: heroHeadlineReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-play-state: paused;
+}
+
+.heroHeadlineHighlight {
+  display: inline-block;
+  margin-left: 0.18em;
+  padding: 0 0.08em;
+  color: #d89b00;
+  background: linear-gradient(135deg, #ffcf52 0%, #f4a300 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 12px 28px rgba(255, 213, 90, 0.24);
+  filter: drop-shadow(0 8px 20px rgba(255, 213, 90, 0.22));
+}
+
+.heroSlide.active .heroHeadlineLine {
+  animation-play-state: running;
+}
+
+@keyframes heroHeadlineReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroEyebrowReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero Slide Visual Section */
+.heroSlideVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroVisualFrame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 520px);
+  padding: 12px;
+  border-radius: 40px;
+  background: radial-gradient(circle at 50% 44%, rgba(255, 213, 90, 0.18), rgba(255, 255, 255, 0) 68%);
+}
+
+.heroVisualImage {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 28px 44px rgba(244, 176, 0, 0.16));
+  animation: heroVisualFloat 6.8s ease-in-out infinite;
+}
+
+.heroVisualNote {
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 240px;
+  padding: 14px 16px;
+  border: 1px solid rgba(245, 215, 126, 0.9);
+  border-radius: 18px;
+  background: rgba(255, 253, 248, 0.94);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  animation: heroVisualNoteReveal 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    heroVisualNoteFloat 5.4s ease-in-out infinite;
+  animation-play-state: paused, paused;
+}
+
+.heroSlide.active .heroVisualNote {
+  animation-play-state: running, running;
+}
+
+.heroVisualNoteTop {
+  top: 14%;
+  left: -8%;
+}
+
+.heroVisualNoteRight {
+  top: 68%;
+  right: -10%;
+}
+
+.heroVisualNoteBottom {
+  bottom: 10%;
+  left: 2%;
+}
+
+.heroVisualNoteIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffd55a 0%, #f4b000 100%);
+  color: #0f172a;
+  box-shadow: 0 8px 18px rgba(244, 176, 0, 0.24);
+}
+
+.heroVisualNoteIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.heroVisualNoteContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.heroVisualNoteTitle {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink-900);
+}
+
+.heroVisualNoteDetail {
+  font-family: "Lora", serif;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--ink-700);
+}
+
+@keyframes heroVisualFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
+}
+
+@keyframes heroVisualNoteReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroVisualNoteFloat {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -8px;
+  }
+}
+
+/* =====================
+   RESPONSIVE STYLES
+   ===================== */
+
+/* Large Tablet / Small Desktop */
+@media (max-width: 1280px) {
+  .slide {
+    padding: 80px 400px 80px 60px;
+  }
+
+  .heroSlide {
+    padding: 80px 60px;
+  }
+
+  .heroSlideInner {
+    gap: 40px;
+  }
+
+  .videoWrapper.minimized {
+    width: 320px;
+    height: 180px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .slide {
+    padding: 80px 360px 80px 48px;
+  }
+
+  .videoWrapper.minimized {
+    width: 300px;
+    height: 169px;
+  }
+}
+
+/* Tablet – video becomes bottom bar, slides get full width with bottom padding to clear bar */
+@media (max-width: 1024px) {
+  .slide {
+    padding: 60px 32px 120px 32px; /* bottom: 88px bar + 32px breathing room */
+    min-height: 80vh;
+  }
+
+  .slideContent {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  /* Hero slide - stack columns on tablet */
+  .heroSlide {
+    padding: 60px 32px 120px 32px;
+  }
+
+  .heroSlideInner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    text-align: center;
+  }
+
+  .heroSlideContent {
+    max-width: 100%;
+    order: 1;
+  }
+
+  .heroSlideVisual {
+    order: 2;
+  }
+
+  .heroVisualFrame {
+    width: min(100%, 460px);
+    padding: 8px;
+  }
+
+  .heroVisualNote {
+    max-width: 220px;
+    padding: 12px 14px;
+  }
+
+  .heroVisualNoteTop {
+    left: 0;
+  }
+
+  .heroVisualNoteRight {
+    top: 66%;
+    right: 0;
+  }
+
+  /* Desktop-only corner style — hidden on mobile/tablet because we use minimizedBar instead */
+  .videoWrapper.minimized {
+    width: 260px;
+    height: 146px;
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .slide {
+    padding: 60px 24px 120px 24px; /* bottom clears the bar */
+    min-height: 75vh;
+  }
+
+  .slideContent {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .slideNumber {
+    margin-bottom: 20px;
+  }
+
+  .slideHeadline {
+    font-size: clamp(28px, 7vw, 40px);
+    margin-bottom: 16px;
+  }
+
+  .slideSubheadline {
+    font-size: clamp(16px, 4vw, 20px);
+    max-width: 100%;
+  }
+
+  /* Hero slide mobile */
+  .heroSlide {
+    padding: 60px 24px 120px 24px;
+  }
+
+  .heroSlideHeadline {
+    font-size: clamp(24px, 6vw, 34px);
+  }
+
+  .heroHeadlineHighlight {
+    text-shadow: 0 8px 18px rgba(255, 213, 90, 0.2);
+    filter: drop-shadow(0 4px 10px rgba(255, 213, 90, 0.18));
+  }
+
+  .heroSlideEyebrow {
+    margin-bottom: 14px;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    gap: 10px;
+  }
+
+  .heroSlideEyebrow::before {
+    width: 30px;
+  }
+
+  .heroVisualFrame {
+    width: min(100%, 380px);
+    padding: 4px;
+  }
+
+  .heroVisualNote {
+    max-width: 190px;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 16px;
+  }
+
+  .heroVisualNoteTop {
+    top: 10%;
+    left: -2%;
+  }
+
+  .heroVisualNoteRight {
+    top: 70%;
+    right: -2%;
+  }
+
+  .heroVisualNoteBottom {
+    bottom: 8%;
+    left: 6%;
+  }
+
+  .heroVisualNoteTitle {
+    font-size: 12px;
+  }
+
+  .heroVisualNoteDetail {
+    font-size: 11px;
+  }
+
+  /* Desktop-only corner style fallback */
+  .videoWrapper.minimized {
+    width: 180px;
+    height: 101px;
+    bottom: 16px;
+    right: 16px;
+    border-width: 2px;
+  }
+
+  .minimized .videoControls {
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .minimized .controlButton {
+    width: 32px;
+    height: 32px;
+  }
+
+  .minimized .controlButton svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .ctaButton {
+    padding: 16px 40px;
+    font-size: 18px;
+  }
+
+  .slideCta {
+    display: flex;
+  }
+
+  .playButton {
+    width: 64px;
+    height: 64px;
+  }
+
+  .playButton svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .unmutePrompt {
+    padding: 20px 24px;
+  }
+
+  .unmuteIcon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .scrollIndicator {
+    bottom: 28px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .slide {
+    padding: 48px 16px 120px 16px; /* bottom clears the bar */
+    min-height: 70vh;
+  }
+
+  .slideHeadline {
+    font-size: clamp(24px, 7vw, 32px);
+  }
+
+  /* Desktop-only corner style fallback */
+  .videoWrapper.minimized {
+    width: 150px;
+    height: 84px;
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .ctaButton {
+    padding: 14px 32px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .scrollIndicator {
+    bottom: 20px;
+  }
+}
+
+/* =====================
+   REDUCED MOTION
+   ===================== */
+@media (prefers-reduced-motion: reduce) {
+  .videoWrapper {
+    transition: none;
+  }
+
+  .heroOverlay {
+    transition: none;
+  }
+
+  .slideContent {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .scrollIndicator,
+  .scrollArrow {
+    animation: none;
+    opacity: 1;
+    transform: translateX(-50%) !important;
+  }
+
+  .controlButton,
+  .unmutePrompt,
+  .playOverlay,
+  .playButton,
+  .ctaButton,
+  .ctaButton::before {
+    transition: none;
+  }
+
+  .controlButton:hover,
+  .unmutePrompt:hover,
+  .playOverlay:hover .playButton,
+  .ctaButton:hover {
+    transform: none;
+  }
+
+  .unmutePrompt:hover {
+    transform: translate(-50%, -50%);
+  }
+}

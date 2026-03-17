@@ -1,0 +1,99 @@
+<svg width="720" height="720" viewBox="0 0 720 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGlow" x1="104" y1="86" x2="593" y2="635" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7DA"/>
+      <stop offset="1" stop-color="#FFE28A"/>
+    </linearGradient>
+    <linearGradient id="cardFill" x1="174" y1="173" x2="532" y2="541" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF7"/>
+      <stop offset="1" stop-color="#FFF3CC"/>
+    </linearGradient>
+    <linearGradient id="accentFill" x1="168" y1="546" x2="508" y2="248" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD55A"/>
+      <stop offset="1" stop-color="#F4B000"/>
+    </linearGradient>
+    <filter id="softShadow" x="82" y="103" width="556" height="534" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="22"/>
+      <feGaussianBlur stdDeviation="26"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.976471 0 0 0 0 0.780392 0 0 0 0 0.180392 0 0 0 0.24 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
+    </filter>
+  </defs>
+
+  <circle cx="360" cy="360" r="246" fill="url(#bgGlow)">
+    <animate attributeName="r" values="246;254;246" dur="6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.92;1" dur="6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="196" cy="178" r="44" fill="#FFF7DA" fill-opacity="0.88">
+    <animateTransform attributeName="transform" type="translate" values="0 0; 0 -10; 0 0" dur="5.4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="548" cy="208" r="28" fill="#FFE28A" fill-opacity="0.7">
+    <animateTransform attributeName="transform" type="translate" values="0 0; 6 -8; 0 0" dur="6.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="134" cy="494" r="22" fill="#FFD55A" fill-opacity="0.46">
+    <animateTransform attributeName="transform" type="translate" values="0 0; -4 8; 0 0" dur="5.8s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="576" cy="508" r="18" fill="#FFF0BA" fill-opacity="0.92">
+    <animateTransform attributeName="transform" type="translate" values="0 0; 6 6; 0 0" dur="4.8s" repeatCount="indefinite"/>
+  </circle>
+
+  <g filter="url(#softShadow)">
+    <rect x="134" y="155" width="452" height="378" rx="40" fill="url(#cardFill)"/>
+    <rect x="134" y="155" width="452" height="378" rx="40" stroke="#F5D77E" stroke-width="2"/>
+  </g>
+
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0; 0 -10; 0 0" dur="5.2s" repeatCount="indefinite"/>
+    <path d="M214 508C214 477.072 239.072 452 270 452H450C480.928 452 506 477.072 506 508V533H214V508Z" fill="#FFF8E0"/>
+    <path d="M242 309L360 215L478 309V447C478 455.837 470.837 463 462 463H258C249.163 463 242 455.837 242 447V309Z" stroke="#0F172A" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M302 464V347H418V464" stroke="#0F172A" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M312 280H407" stroke="#0F172A" stroke-width="12" stroke-linecap="round"/>
+    <path d="M312 313H407" stroke="#0F172A" stroke-width="12" stroke-linecap="round" opacity="0.18"/>
+    <rect x="331" y="367" width="58" height="96" rx="10" fill="url(#accentFill)" stroke="#0F172A" stroke-width="10">
+      <animate attributeName="y" values="367;363;367" dur="3.8s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0; -8 -6; 0 0" dur="4.6s" repeatCount="indefinite"/>
+    <rect x="176" y="208" width="126" height="104" rx="24" fill="#FFFBEE" stroke="#F2D37A" stroke-width="2"/>
+    <circle cx="214" cy="244" r="16" fill="#FFD55A" fill-opacity="0.25"/>
+    <path d="M206 244L212 250L223 238" stroke="#0F172A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="24" stroke-dashoffset="24">
+      <animate attributeName="stroke-dashoffset" values="24;0;0" dur="4.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M246 237H276" stroke="#0F172A" stroke-width="6" stroke-linecap="round"/>
+    <path d="M246 260H286" stroke="#0F172A" stroke-width="6" stroke-linecap="round" opacity="0.26"/>
+  </g>
+
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0; 9 -5; 0 0" dur="5s" repeatCount="indefinite"/>
+    <rect x="431" y="228" width="118" height="126" rx="26" fill="#FFFDF8" stroke="#F2D37A" stroke-width="2"/>
+    <path d="M490 258C508.225 258 523 272.775 523 291C523 309.225 508.225 324 490 324C471.775 324 457 309.225 457 291C457 272.775 471.775 258 490 258Z" fill="#FFD55A" fill-opacity="0.22">
+      <animate attributeName="fill-opacity" values="0.22;0.36;0.22" dur="3.6s" repeatCount="indefinite"/>
+    </path>
+    <path d="M476 292L486 302L506 281" stroke="#0F172A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="40">
+      <animate attributeName="stroke-dashoffset" values="40;0;0" dur="4.4s" repeatCount="indefinite"/>
+    </path>
+    <path d="M459 342H522" stroke="#0F172A" stroke-width="6" stroke-linecap="round" opacity="0.2"/>
+  </g>
+
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0; -6 8; 0 0" dur="5.8s" repeatCount="indefinite"/>
+    <path d="M154 390C154 370.67 169.67 355 189 355H263C282.33 355 298 370.67 298 390V424C298 443.33 282.33 459 263 459H189C169.67 459 154 443.33 154 424V390Z" fill="#FFFDF6" stroke="#F2D37A" stroke-width="2"/>
+    <path d="M190 405H239" stroke="#0F172A" stroke-width="6" stroke-linecap="round"/>
+    <path d="M190 430H266" stroke="#0F172A" stroke-width="6" stroke-linecap="round" opacity="0.2"/>
+  </g>
+
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0; 8 6; 0 0" dur="4.8s" repeatCount="indefinite"/>
+    <circle cx="525" cy="433" r="52" fill="#FFF8E3" stroke="#F2D37A" stroke-width="2">
+      <animate attributeName="r" values="52;55;52" dur="3.4s" repeatCount="indefinite"/>
+    </circle>
+    <path d="M501 433L516 448L549 415" stroke="#0F172A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="64" stroke-dashoffset="64">
+      <animate attributeName="stroke-dashoffset" values="64;0;0" dur="4s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>

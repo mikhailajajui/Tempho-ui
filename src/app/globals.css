@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600&family=Lora:wght@400..700&family=Space+Grotesk:wght@300..700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-family-sans: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-family-display: "Abril Fatface", cursive;
+}
+
+:root {
+  --font-family-sans: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-family-display: "Abril Fatface", cursive;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  color: #0f172a;
+  background: #ffffff;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Force Google Maps Autocomplete dropdown to be on top */
+.pac-container {
+  z-index: 99999 !important;
+  border-radius: 12px;
+  margin-top: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  font-family: 'Inter', sans-serif;
+}
+
+.pac-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.pac-item:hover {
+  background-color: #f8fafc;
+}
+
+.pac-item-query {
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 500;
+}

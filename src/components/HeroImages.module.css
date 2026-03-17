@@ -1,0 +1,415 @@
+.heroImageWrapper {
+    position: relative;
+    width: clamp(450px, 48vw, 900px);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 30;
+    justify-self: center;
+    /* DEBUG: Child */
+}
+
+.ready {
+    /* Used to trigger animations once critical assets are loaded */
+    opacity: 1;
+}
+
+/* Ensures 'ready' class is exported correctly by CSS Modules */
+
+.pl1,
+.pl2,
+.pl3 {
+    position: absolute;
+    /* background: #ef4444; */
+    background-color: transparent;
+    border-radius: 0;
+    /* box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.12); */
+    box-shadow: none;
+    transform-origin: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+@keyframes premiumBlurIn {
+    0% {
+        opacity: 0;
+        filter: blur(20px);
+        transform: translateY(-48%) scale(0.96);
+    }
+
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+.pl1,
+.pl2,
+.pl3 {
+    opacity: 0;
+    animation-duration: 18s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+
+    /* Apply common entrance properties */
+    animation-fill-mode: forwards;
+}
+
+.pl2 {
+    width: calc(60.2% + 13px);
+    height: 100%;
+    left: 22.5%;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url('/hero-images/p2-ic.webp');
+    /* Match sequenceP2 start */
+}
+
+.pl1 {
+    width: 34.5%;
+    height: 40.2%;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url('/hero-images/p1-ic.webp');
+}
+
+.pl3 {
+    width: 18%;
+    height: 43.4%;
+    right: -1.1%;
+    top: 37%;
+    /* Adjusted from 39% for better baseline alignment */
+    transform: translateY(-50%);
+    background-image: url('/hero-images/p3-ic.webp');
+    /* Match sequenceP3 start */
+}
+
+/* Entrance Animation overrides (One-by-one fade in) */
+.pl1 {
+    animation-name: premiumBlurIn;
+    animation-duration: 1.2s;
+    animation-delay: 0.2s;
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+    animation-iteration-count: 1;
+}
+
+.pl2 {
+    animation-name: premiumBlurIn;
+    animation-duration: 1.2s;
+    animation-delay: 0.5s;
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+    animation-iteration-count: 1;
+}
+
+.pl3 {
+    animation-name: premiumBlurIn;
+    animation-duration: 1.2s;
+    animation-delay: 0.8s;
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+    animation-iteration-count: 1;
+}
+
+/* Only start the looping sequence once the critical assets are ready */
+.ready .pl1 {
+    animation: premiumBlurIn 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards,
+        sequenceP1 18s ease-in-out 1.4s infinite;
+}
+
+.ready .pl2 {
+    animation: premiumBlurIn 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.5s forwards,
+        sequenceP2 18s ease-in-out 1.8s infinite;
+}
+
+.ready .pl3 {
+    animation: premiumBlurIn 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.8s forwards,
+        sequenceP3 18s ease-in-out 2.2s infinite;
+}
+
+/* Keyframes with Breathing Pop-Swap Logic
+   Detailed Checkpoints:
+   0-28%: Rest IC
+   33%: Peak BC
+   38-61%: Rest BC
+   66%: Peak AC
+   71-90%: Rest AC
+   95%: Peak IC
+   100%: Rest IC (Matches 0%)
+*/
+@keyframes sequenceP1 {
+
+    0%,
+    12% {
+        background-image: url('/hero-images/p1-ic.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    17% {
+        background-image: url('/hero-images/p1-bc.webp');
+        transform: translateY(-53%) scale(1.05);
+        opacity: 0.8;
+    }
+
+    22%,
+    45% {
+        background-image: url('/hero-images/p1-bc.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        background-image: url('/hero-images/p1-ac.webp');
+        transform: translateY(-53%) scale(1.05);
+        opacity: 0.8;
+    }
+
+    55%,
+    78% {
+        background-image: url('/hero-images/p1-ac.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    83% {
+        background-image: url('/hero-images/p1-ic.webp');
+        transform: translateY(-53%) scale(1.05);
+        opacity: 0.8;
+    }
+
+    88%,
+    100% {
+        background-image: url('/hero-images/p1-ic.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes sequenceP2 {
+
+    /* Offset loop: Starts AC -> IC -> BC */
+    0%,
+    12% {
+        background-image: url('/hero-images/p2-ic.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    17% {
+        background-image: url('/hero-images/p2-bc.webp');
+        transform: translateY(-53%) scale(1.05);
+        opacity: 0.8;
+    }
+
+    22%,
+    45% {
+        background-image: url('/hero-images/p2-bc.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        background-image: url('/hero-images/p2-ac.webp');
+        transform: translateY(-53%) scale(1.05);
+        opacity: 0.8;
+    }
+
+    55%,
+    78% {
+        background-image: url('/hero-images/p2-ac.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    83% {
+        background-image: url('/hero-images/p2-ic.webp');
+        transform: translateY(-53%) scale(1.05);
+        opacity: 0.8;
+    }
+
+    88%,
+    100% {
+        background-image: url('/hero-images/p2-ic.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes sequenceP3 {
+
+    /* Offset loop: Starts BC -> AC -> IC */
+    0%,
+    12% {
+        background-image: url('/hero-images/p3-ic.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    17% {
+        background-image: url('/hero-images/p3-bc.webp');
+        transform: translateY(-53%) scale(1.05);
+        opacity: 0.8;
+    }
+
+    22%,
+    45% {
+        background-image: url('/hero-images/p3-bc.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        background-image: url('/hero-images/p3-ac.webp');
+        transform: translateY(-53%) scale(1.05);
+        opacity: 0.8;
+    }
+
+    55%,
+    78% {
+        background-image: url('/hero-images/p3-ac.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    83% {
+        background-image: url('/hero-images/p3-ic.webp');
+        transform: translateY(-53%) scale(1.05);
+        opacity: 0.8;
+    }
+
+    88%,
+    100% {
+        background-image: url('/hero-images/p3-ic.webp');
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .heroImageWrapper {
+        width: 100%;
+        max-width: 340px;
+        /* Balanced size for mobile */
+        aspect-ratio: 1 / 1.3;
+        /* Taller container to prevent vertical cutting */
+        margin: 20px 0 10px auto;
+        /* Reduced from 40px */
+        justify-self: flex-end;
+        transform: translateY(-10vh);
+        /* Shifted up on mobile specifically */
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px 20px;
+        /* Significant vertical padding for safety */
+        overflow: visible;
+        top: 10%;
+        /* Ensure shadows and floating assets aren't clipped */
+    }
+
+    .pl2 {
+        width: 90%;
+        left: 5%;
+        height: 85%;
+        /* Inner height restriction to guarantee safe gap at bottom */
+        top: 50%;
+        transform: translateY(-50%);
+        background-position: center top;
+        background-size: contain;
+        /* Ensure full visibility of the subject */
+        z-index: 2;
+    }
+
+    .pl1 {
+        width: 50%;
+        height: 50%;
+        margin-left: -20%;
+        left: 5%;
+        top: 52%;
+        transform: translateY(-50%);
+        background-size: contain;
+        z-index: 3;
+    }
+
+    .pl3 {
+        display: none;
+    }
+
+    .gl1 {
+        width: 55px;
+        /* Sized down to match wrapper */
+        top: 50px;
+        left: -2%;
+        z-index: 60;
+    }
+
+    .gr1 {
+        width: 45px;
+        /* Sized down to match wrapper */
+        bottom: 5%;
+        right: -2%;
+        z-index: 60;
+    }
+}
+
+.gl1,
+.gr1 {
+    position: absolute;
+    z-index: 50;
+    /* Super high to ensure it's on top */
+    /* More fluid, slower timing */
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    pointer-events: none;
+}
+
+.ready .gl1,
+.ready .gr1 {
+    opacity: 1;
+}
+
+@keyframes fluidImmersiveFlow {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(var(--r, 0deg));
+    }
+
+    25% {
+        transform: translate(12px, -20px) rotate(calc(var(--r, 0deg) + 2deg));
+    }
+
+    50% {
+        transform: translate(0, -40px) rotate(calc(var(--r, 0deg) + 5deg));
+    }
+
+    75% {
+        transform: translate(-12px, -20px) rotate(calc(var(--r, 0deg) + 2deg));
+    }
+}
+
+.gl1 {
+    top: 5%;
+    left: -5%;
+    width: clamp(80px, 10vw, 120px);
+    height: auto;
+    transform: rotate(-15deg);
+    animation: fluidImmersiveFlow 10s ease-in-out infinite;
+    animation-delay: -1s;
+    --r: -15deg;
+}
+
+.gr1 {
+    bottom: 5%;
+    right: 5%;
+    width: clamp(60px, 8vw, 100px);
+    height: auto;
+    transform: rotate(15deg);
+    animation: fluidImmersiveFlow 13s ease-in-out infinite;
+    animation-delay: -4s;
+    --r: 15deg;
+}

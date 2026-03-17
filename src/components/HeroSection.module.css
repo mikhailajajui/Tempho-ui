@@ -1,0 +1,338 @@
+:global(:root) {
+    --ink-900: #0f172a;
+    --ink-700: #334155;
+    --ink-500: #64748b;
+    --yellow-cta: #FFD55A;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDrift {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleBounce {
+    0% {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes orbFloat1 {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(100px, 50px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes orbFloat2 {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(-80px, -60px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+/* Utility Classes */
+.maskContainer {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    padding-bottom: 25px;
+    /* Prevent descender clipping */
+    margin-bottom: -25px;
+    /* Reset layout impact */
+}
+
+.magneticWrapper {
+    display: inline-block;
+    position: relative;
+    /* Wrapper handles the magnetic translate transform via JS */
+}
+
+.animTitle {
+    display: inline-block;
+    animation: slideUp 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    line-height: 1.2;
+    white-space: nowrap;
+    /* Force 2 lines max by preventing internal wrapping */
+}
+
+.animSubtitle {
+    opacity: 0;
+    animation: fadeInDrift 0.8s ease-out 0.2s forwards;
+}
+
+.animButton {
+    /* Handles the scale/opacity entrance animation */
+    opacity: 0;
+    /* Start invisible */
+    animation: scaleBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    /* animation-delay: 0.4s; Optional delay if we want it to pop in later */
+}
+
+/* Orbs */
+.orb1,
+.orb2 {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: var(--yellow-cta);
+    filter: blur(120px);
+    opacity: 0.05;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.orb1 {
+    top: -10%;
+    left: -10%;
+    animation: orbFloat1 20s ease-in-out infinite;
+}
+
+.orb2 {
+    bottom: -10%;
+    right: -10%;
+    animation: orbFloat2 25s ease-in-out infinite alternate;
+}
+
+/* Expansion Effect */
+.expandingOverlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: var(--yellow-cta);
+    border-radius: 50%;
+    z-index: 9999;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.expandingOverlay.active {
+    transform: translate(-50%, -50%) scale(150);
+}
+
+.heroSection {
+    min-height: 100vh;
+    max-width: 200vw;
+    display: flex;
+    justify-content: center;
+    background: #ffffff;
+    overflow: hidden;
+    position: relative;
+}
+
+.heroContainer {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 80px 40px 0;
+    /* Reduced top/bottom padding */
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+    gap: 40px;
+}
+
+.heroContent {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    width: 100%;
+    max-width: 1400px;
+    position: relative;
+    z-index: 20;
+    margin-top: 5vh;
+    /* Shifted down less for laptop compatibility */
+}
+
+.heroTitle {
+    font-family: "Abril Fatface", cursive;
+    font-size: clamp(48px, 6.2vw, 88px);
+    line-height: 1.05;
+    font-weight: 400;
+    color: #000000;
+    margin-bottom: 24px;
+    letter-spacing: 0em;
+    position: relative;
+    transition: text-shadow 0.3s ease;
+    z-index: 20;
+}
+
+.heroTitle:hover {
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.heroSubtitle {
+    font-family: "Lora", serif;
+    font-size: clamp(23.76px, 2.904vw, 31.68px);
+    line-height: 1.5;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    font-weight: 400;
+    max-width: 80%;
+}
+
+.heroDetails {
+    font-family: "Lora", serif;
+    font-size: clamp(18.48px, 1.848vw, 21.12px);
+    color: #1a1a1a;
+    margin-bottom: 40px;
+    font-weight: 500;
+}
+
+.heroActions {
+    display: flex;
+}
+
+.primaryButton {
+    display: inline-block;
+    padding: 16px 32px;
+    font-family: "Lora", serif;
+    background-color: var(--yellow-cta);
+    color: #000000;
+    font-size: clamp(21.12px, 2.112vw, 23.76px);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 999px;
+    box-shadow: 0 10px 24px rgba(255, 213, 90, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.primaryButton::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent);
+    transform: skewX(-25deg);
+    transition: 0.75s;
+    pointer-events: none;
+}
+
+.primaryButton:hover::before {
+    left: 150%;
+}
+
+.primaryButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(255, 213, 90, 0.35);
+}
+
+@media (max-width: 1024px) {
+    .heroTitle {
+        font-size: 64px;
+    }
+}
+
+@media (max-width: 768px) {
+    .heroSection {
+        min-height: auto;
+        padding-top: 80px;
+    }
+
+    .heroContainer {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 30px 20px 20px;
+        text-align: left;
+    }
+
+    .heroContent {
+        margin-top: 40px;
+        margin-left: 0;
+        align-items: flex-start;
+        text-align: left;
+        width: 100%;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .primaryButton {
+        padding: 14px 28px;
+        font-size: 18px;
+    }
+
+    .heroTitle {
+        font-size: clamp(34px, 10vw, 42px);
+        margin-bottom: 16px;
+        line-height: 1.1;
+        white-space: normal;
+    }
+
+    .animTitle {
+        white-space: nowrap;
+    }
+
+    .heroSubtitle {
+        font-size: 18px;
+        max-width: 100%;
+        margin-bottom: 12px;
+    }
+
+    .heroDetails {
+        font-size: 16px;
+        max-width: 100%;
+        margin-bottom: 24px;
+    }
+
+    .maskContainer {
+        padding-bottom: 5px;
+        margin-bottom: -5px;
+        display: inline-block;
+        /* Revert to inline-block for better clipping control */
+    }
+}

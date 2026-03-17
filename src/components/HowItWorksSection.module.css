@@ -1,0 +1,417 @@
+.howItWorksSection {
+    min-height: 600px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px 80px;
+    /* Reduced top padding */
+    position: relative;
+    overflow: hidden;
+    font-family: "Lora", serif;
+    z-index: 10;
+    /* Create a base stacking context for the section */
+}
+
+.container {
+    width: 100%;
+    max-width: 1530px;
+    /* Increased again to widen cards further */
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    margin-bottom: 64px;
+}
+
+.title {
+    font-family: var(--font-family-display);
+    font-size: clamp(64px, 8.5vw, 88px);
+    color: #141414;
+    margin: 0 0 16px;
+    font-weight: 800;
+}
+
+.subtitle {
+    font-family: "Lora", serif;
+    font-size: clamp(16px, 2vw, 20px);
+    color: #52525b;
+    margin: 0;
+}
+
+.stepsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 160px;
+    /* Increased card spacing */
+    margin-bottom: 64px;
+    position: relative;
+    align-items: start;
+}
+
+.stepWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.stepNumberInner {
+    font-family: var(--font-family-display);
+    font-size: 24px;
+    color: #f97316;
+    /* Brand orange for the step number */
+    line-height: 1;
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 800;
+    opacity: 0.8;
+}
+
+.stepCard {
+    width: 100%;
+    background: #f3f4f6;
+    border-radius: 32px;
+    padding: 64px 32px 56px;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    /* Subtle start */
+    position: relative;
+    min-height: 260px;
+    border: none;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: default;
+}
+
+.stepCard:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    /* More diffused on hover */
+}
+
+
+.darkCard {
+    background: #585858;
+}
+
+.darkCard .stepTitle,
+.darkCard .stepDescription,
+.darkCard .stepNumberInner {
+    color: #ffffff;
+}
+
+.darkCard .iconWrap {
+    background: #ffffff;
+}
+
+.highlightedCard {
+    background: #ffffff;
+}
+
+.highlightedCard .stepTitle,
+.highlightedCard .stepDescription,
+.highlightedCard .stepNumberInner {
+    color: #111111;
+}
+
+.stepTitle {
+    font-family: "Canvas Sans", "Space Grotesk", sans-serif;
+    font-size: 32px;
+    /* Larger title */
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+    color: #000000;
+    font-weight: 800;
+    /* Bolder */
+}
+
+.stepDescription {
+    font-family: "Lora", serif;
+    font-size: 22px;
+    /* Larger description text */
+    line-height: 1.5;
+    margin: 0 auto;
+    color: #374151;
+    font-weight: 400;
+    max-width: 95%;
+}
+
+.iconWrap {
+    position: absolute;
+    right: 32px;
+    /* Adjusted position for larger card */
+    top: 32px;
+    width: 64px;
+    /* Restored size */
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    /* Circle background */
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stepIconImage {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.stepCard:hover .stepIconImage {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.trustBar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    /* Reduced from 40px */
+    margin-top: 32px;
+}
+
+.trustItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Reduced from 10px */
+    font-size: 14px;
+    /* Reduced from 16px */
+    font-family: "Lora", serif;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.trustIcon {
+    color: #f97316;
+}
+
+.ctaButton {
+    display: inline-block;
+    padding: 18px 48px;
+    background-color: #FFD55A;
+    color: #000000;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 10px 20px rgba(255, 213, 90, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    font-family: "Lora", serif;
+    font-size: 20px;
+    position: relative;
+    overflow: hidden;
+    /* For shimmer */
+}
+
+.ctaButton::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent);
+    transform: skewX(-25deg);
+    transition: 0.75s;
+    pointer-events: none;
+}
+
+.ctaButton:hover::before {
+    left: 150%;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 150%;
+    }
+}
+
+
+/* Decorative Assets */
+.gl2,
+.gr2 {
+    position: absolute;
+    z-index: 900;
+    pointer-events: none;
+}
+
+@keyframes fluidImmersiveFlow {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(var(--r, 0deg));
+    }
+
+    25% {
+        transform: translate(12px, -20px) rotate(calc(var(--r, 0deg) + 2deg));
+    }
+
+    50% {
+        transform: translate(0, -40px) rotate(calc(var(--r, 0deg) + 5deg));
+    }
+
+    75% {
+        transform: translate(-12px, -20px) rotate(calc(var(--r, 0deg) + 2deg));
+    }
+}
+
+.gl2 {
+    top: 5%;
+    left: -2%;
+    width: clamp(80px, 10vw, 150px);
+    transform: rotate(-10deg);
+    animation: fluidImmersiveFlow 14s ease-in-out infinite;
+    animation-delay: -2s;
+    --r: -10deg;
+}
+
+.gr2 {
+    bottom: 2%;
+    right: -2%;
+    width: clamp(80px, 11vw, 160px);
+    transform: rotate(12deg);
+    animation: fluidImmersiveFlow 17s ease-in-out infinite;
+    animation-delay: -8s;
+    --r: 12deg;
+}
+
+.decorativeImg {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    opacity: 1;
+}
+
+@media (max-width: 900px) {
+    .container {
+        text-align: left;
+        /* Left align main container text */
+        padding: 0 16px;
+        /* Tightened from 24px */
+    }
+
+    .header {
+        text-align: left;
+        margin-left: 0;
+        padding-left: 0;
+    }
+
+    .title {
+        margin-left: 0;
+    }
+
+    .gl2 {
+        left: auto;
+        right: 5%;
+        top: 8%;
+        width: 60px;
+        transform: rotate(120deg);
+        --r: 120deg;
+    }
+
+    .gr2 {
+        bottom: 8%;
+        right: -2%;
+        width: 70px;
+        --r: 12deg;
+    }
+
+    .stepsGrid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        /* Tightened from 64px */
+    }
+
+    .stepWrapper {
+        align-items: flex-start;
+        /* Align numbers and cards to the left */
+        gap: 16px;
+        margin-left: 0;
+        padding-left: 0;
+    }
+
+    .stepCard {
+        padding: 40px 24px;
+        /* Reduced from 64px 32px 48px */
+        min-height: auto;
+        text-align: left;
+    }
+
+    .stepDescription {
+        margin: 0;
+        /* Remove auto margin */
+        max-width: 100%;
+    }
+
+    .iconWrap {
+        top: 24px;
+        right: 24px;
+    }
+
+    .trustBar {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        /* Center them as they scale down */
+        gap: clamp(8px, 2vw, 20px);
+        /* Responsive gap */
+        margin-top: 32px;
+        width: 100%;
+    }
+
+    .trustItem {
+        font-size: clamp(9px, 3vw, 13px);
+        /* Fluidly scales for smaller screens */
+        white-space: nowrap;
+        flex-shrink: 1;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        /* Tighter internal gap for mobile */
+    }
+
+    .trustIcon {
+        width: 12px;
+        /* Scale down icon slightly more */
+        height: 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .howItWorksSection {
+        padding: 10px 16px 40px;
+        /* Reduced from 40px 16px */
+    }
+
+    .title {
+        font-size: 40px;
+    }
+
+    .stepTitle {
+        font-size: 24px;
+    }
+
+    .stepDescription {
+        font-size: 18px;
+    }
+
+    .ctaButton {
+        width: 100%;
+        text-align: center;
+    }
+}

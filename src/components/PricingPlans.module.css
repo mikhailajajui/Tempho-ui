@@ -1,0 +1,276 @@
+/* PricingPlans.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 48px;
+    padding: 60px 20px;
+}
+
+.productPlans {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 0;
+    list-style: none;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.productPlan {
+    background: #ffffff;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 360px;
+    min-height: 680px;
+    /* Locked card height */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #edf2f7;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.productPlan:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradients for each plan header with dots pattern */
+.plan1 {
+    background:
+        radial-gradient(#00000008 1px, transparent 0),
+        linear-gradient(180deg, rgba(254, 242, 242, 0.6) 0%, #ffffff 40%);
+    background-size: 20px 20px, 100% 100%;
+}
+
+.plan2 {
+    background:
+        radial-gradient(#00000008 1px, transparent 0),
+        linear-gradient(180deg, rgba(238, 242, 255, 0.8) 0%, #ffffff 40%);
+    background-size: 20px 20px, 100% 100%;
+    border: 1px solid #e0e7ff;
+}
+
+.plan3 {
+    background:
+        radial-gradient(#00000008 1px, transparent 0),
+        linear-gradient(180deg, rgba(236, 253, 245, 0.6) 0%, #ffffff 40%);
+    background-size: 20px 20px, 100% 100%;
+}
+
+.header {
+    padding: 20px 32px 24px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    height: 240px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a202c;
+    margin: 0 0 16px 0;
+    font-family: inherit;
+}
+
+.startsAt {
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 4px;
+}
+
+.price {
+    display: flex;
+    align-items: flex-end;
+    /* Align prices to the bottom of the container */
+    gap: 8px;
+    height: 72px;
+    /* Fixed height to accommodate strikePrice without shifting layout */
+    margin-bottom: 16px;
+}
+
+.priceContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.priceValue {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1a202c;
+    line-height: 1;
+}
+
+.strikePrice {
+    font-size: 16px;
+    color: #a0aec0;
+    text-decoration: line-through;
+    margin-bottom: -4px;
+}
+
+.frequency {
+    font-size: 14px;
+    color: #718096;
+    font-weight: 400;
+}
+
+.planDescription {
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.5;
+    margin: 0;
+    height: 72px;
+    /* Fixed height for 3 lines of text */
+    overflow: hidden;
+}
+
+.btn {
+    margin: 0 32px 32px;
+    height: 52px;
+    /* Fixed button height */
+    padding: 0 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+/* Plan Specific Buttons */
+.plan1 .btn,
+.plan3 .btn {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #2d3748;
+}
+
+.plan1 .btn:hover,
+.plan3 .btn:hover {
+    background: #f7fafc;
+    border-color: #cbd5e0;
+}
+
+.plan2 .btn {
+    background: #FFD55A;
+    color: #111111;
+    border: none;
+}
+
+.plan2 .btn:hover {
+    background: #ffcf40;
+    box-shadow: 0 4px 12px rgba(255, 213, 90, 0.3);
+}
+
+.featuresSection {
+    padding: 0 32px 40px;
+}
+
+.divider {
+    height: 1px;
+    background: #edf2f7;
+    margin-bottom: 32px;
+}
+
+.featuresHeadline {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0 0 16px 0;
+}
+
+.featuresList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.featuresList li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #4a5568;
+    line-height: 1.4;
+}
+
+.check::before {
+    content: "✓";
+    font-size: 14px;
+    font-weight: 800;
+    color: #1a202c;
+    flex-shrink: 0;
+}
+
+.recommendedBadge {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a202c;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .productPlan {
+        max-width: 320px;
+    }
+}
+
+@media (max-width: 768px) {
+    .productPlans {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .productPlan {
+        max-width: 100%;
+    }
+}
+
+/* Trust Badges & Misc */
+.trustBadges {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+}
+
+.trustItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #718096;
+    font-weight: 500;
+}
+
+.compareAll {
+    margin-top: 16px;
+    background: none;
+    border: none;
+    color: #718096;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}

@@ -1,0 +1,215 @@
+/* VideoPlayer Styles */
+.videoContainer {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #0f172a;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+.video {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+}
+
+/* Video Controls - Bottom Right */
+.controls {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.controlButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #0f172a;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.controlButton:hover {
+  transform: scale(1.08);
+  background-color: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.controlButton:focus-visible {
+  outline: 3px solid #FFD55A;
+  outline-offset: 2px;
+}
+
+.controlButton:active {
+  transform: scale(0.95);
+}
+
+/* Unmute Prompt Overlay */
+.unmutePrompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 32px;
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  cursor: pointer;
+  color: #ffffff;
+  z-index: 20;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.unmutePrompt:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.unmutePrompt:focus-visible {
+  outline: 3px solid #FFD55A;
+  outline-offset: 2px;
+}
+
+.unmuteIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background-color: #FFD55A;
+  border-radius: 50%;
+  color: #0f172a;
+}
+
+.unmuteText {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Play Overlay - When autoplay fails */
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+  cursor: pointer;
+  z-index: 15;
+  transition: background-color 0.2s ease;
+}
+
+.playOverlay:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.playOverlay:focus-visible {
+  outline: 3px solid #FFD55A;
+  outline-offset: -3px;
+}
+
+.playButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background-color: #FFD55A;
+  border-radius: 50%;
+  color: #0f172a;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 30px rgba(255, 213, 90, 0.4);
+}
+
+.playOverlay:hover .playButton {
+  transform: scale(1.1);
+  box-shadow: 0 15px 40px rgba(255, 213, 90, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .controls {
+    bottom: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+
+  .controlButton {
+    width: 44px;
+    height: 44px;
+  }
+
+  .controlButton svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .unmutePrompt {
+    padding: 20px 24px;
+    gap: 10px;
+  }
+
+  .unmuteIcon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .unmuteIcon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .unmuteText {
+    font-size: 14px;
+  }
+
+  .playButton {
+    width: 64px;
+    height: 64px;
+  }
+
+  .playButton svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .controlButton,
+  .unmutePrompt,
+  .playOverlay,
+  .playButton {
+    transition: none;
+  }
+
+  .controlButton:hover,
+  .unmutePrompt:hover,
+  .playOverlay:hover .playButton {
+    transform: none;
+  }
+
+  .unmutePrompt:hover {
+    transform: translate(-50%, -50%);
+  }
+}
