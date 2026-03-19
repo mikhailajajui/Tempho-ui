@@ -806,6 +806,691 @@
 }
 
 /* =====================
+   SUPPORT SLIDE - landlord outcomes
+   ===================== */
+.supportSlideContent {
+  max-width: 1260px;
+  width: 100%;
+  display: grid;
+  gap: 28px;
+  opacity: 0.25;
+  transform: translateY(50px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.slide.active .supportSlideContent {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide:has(.supportSlideContent) {
+  justify-content: center;
+  padding-right: 88px;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(255, 213, 90, 0.16), transparent 24%),
+    radial-gradient(circle at 82% 18%, rgba(245, 228, 187, 0.38), transparent 18%),
+    linear-gradient(180deg, #fffdf9 0%, #fff8ee 48%, #ffffff 100%);
+}
+
+.supportMasthead {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: end;
+}
+
+.supportHeader {
+  display: grid;
+  gap: 12px;
+  max-width: 720px;
+}
+
+.supportIntro {
+  margin: 0;
+  max-width: 62ch;
+  font-family: "Lora", serif;
+  font-size: 18px;
+  line-height: 1.62;
+  color: rgba(51, 65, 85, 0.9);
+}
+
+.supportRailLabel {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(100, 116, 139, 0.8);
+}
+
+.supportLayout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.25fr) minmax(250px, 0.82fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.supportNarrativeColumn {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.supportLeadLabel {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(139, 109, 56, 0.76);
+}
+
+.supportNarrativeCard {
+  display: grid;
+  gap: 12px;
+  padding: 22px 22px 24px;
+  border-radius: 26px;
+  border: 1px solid rgba(212, 190, 150, 0.38);
+  background: linear-gradient(180deg, rgba(255, 252, 245, 0.96), rgba(251, 243, 228, 0.84));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 18px 36px rgba(145, 111, 48, 0.06);
+}
+
+.supportNarrativeTitle {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  color: var(--ink-900);
+}
+
+.supportNarrativeBody {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(51, 65, 85, 0.8);
+}
+
+.supportTimeline {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding-left: 26px;
+}
+
+.supportTimeline::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 12px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(201, 160, 74, 0.92), rgba(201, 160, 74, 0.12));
+}
+
+.supportStageCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding: 20px 22px;
+  border-radius: 24px;
+  border: 1px solid rgba(215, 193, 145, 0.34);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(252, 246, 231, 0.88));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 18px 34px rgba(145, 111, 48, 0.07);
+}
+
+.supportStageCard::before {
+  content: "";
+  position: absolute;
+  top: 30px;
+  left: -20px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd55a 0%, #f4a300 100%);
+  box-shadow: 0 0 0 6px rgba(255, 213, 90, 0.16);
+}
+
+.supportStageTop {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.supportStageStep {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 169, 110, 0.28);
+  background: rgba(255, 252, 245, 0.88);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(100, 116, 139, 0.88);
+}
+
+.supportStageBody {
+  display: grid;
+  gap: 10px;
+}
+
+.supportStageDescription {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 15px;
+  line-height: 1.58;
+  color: rgba(51, 65, 85, 0.82);
+}
+
+.supportProofRail {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.supportStatStack {
+  display: grid;
+  gap: 12px;
+}
+
+.supportStatCard {
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(214, 187, 129, 0.34);
+  background: rgba(255, 251, 242, 0.86);
+  box-shadow: 0 10px 24px rgba(149, 115, 55, 0.06);
+}
+
+.supportStatValue {
+  font-family: "Abril Fatface", cursive;
+  font-size: clamp(24px, 2.1vw, 32px);
+  line-height: 1;
+  color: #b87b00;
+}
+
+.supportStatLabel {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(51, 65, 85, 0.88);
+}
+
+.supportIconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #fff3c3 0%, #ffd55a 100%);
+  color: var(--ink-900);
+  box-shadow: 0 12px 26px rgba(255, 213, 90, 0.28);
+}
+
+.supportIconWrap svg {
+  width: 24px;
+  height: 24px;
+}
+
+.supportCardTitle {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--ink-900);
+}
+
+.supportList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.supportListItem {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-family: "Lora", serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-700);
+}
+
+.supportListBullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffd55a 0%, #f4a300 100%);
+  box-shadow: 0 0 0 4px rgba(255, 213, 90, 0.14);
+  translate: 0 0.48em;
+}
+
+.supportProofCard {
+  display: grid;
+  gap: 12px;
+  padding: 22px 20px 24px;
+  border-radius: 26px;
+  border: 1px solid rgba(212, 190, 150, 0.36);
+  background:
+    radial-gradient(circle at top right, rgba(255, 213, 90, 0.14), transparent 26%),
+    linear-gradient(180deg, rgba(255, 254, 249, 0.98), rgba(250, 242, 225, 0.88));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 18px 38px rgba(145, 111, 48, 0.07);
+}
+
+.supportProofEyebrow {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(139, 109, 56, 0.76);
+}
+
+.supportProofQuote {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 20px;
+  line-height: 1.45;
+  color: var(--ink-900);
+}
+
+.supportProofAttribution {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(51, 65, 85, 0.78);
+}
+
+/* =====================
+   WORKFLOW SLIDE - editorial process and benefits rail
+   ===================== */
+.workflowSlideContent {
+  max-width: 1240px;
+  width: 100%;
+  display: grid;
+  gap: 28px;
+  opacity: 0.25;
+  transform: translateY(50px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.slide.active .workflowSlideContent {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide:has(.workflowSlideContent) {
+  justify-content: center;
+  padding-right: 80px;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(255, 213, 90, 0.18), transparent 24%),
+    radial-gradient(circle at 82% 18%, rgba(245, 228, 187, 0.3), transparent 20%),
+    linear-gradient(180deg, #fffdf9 0%, #fff8ee 44%, #ffffff 100%);
+}
+
+.workflowHeader {
+  display: grid;
+  gap: 14px;
+  max-width: 720px;
+}
+
+/* ── Zigzag stagger reveal ── */
+@keyframes zigzagReveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Zigzag steps container */
+.workflowZigzag {
+  display: grid;
+  gap: 0;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Each step row — 2-column grid with stagger entrance */
+.workflowZigzagRow {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 32px;
+  align-items: center;
+  padding: 28px 24px;
+  border-radius: 28px;
+  opacity: 0;
+  animation: zigzagReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-play-state: paused;
+  transition: background 0.35s ease;
+}
+
+.workflowZigzagRow:hover {
+  background: rgba(255, 248, 230, 0.5);
+}
+
+.slide.active .workflowZigzagRow {
+  animation-play-state: running;
+}
+
+/* Reversed row (even steps) — icon left, text right */
+.workflowZigzagRowReversed {
+  grid-template-columns: 0.8fr 1.2fr;
+}
+
+.workflowZigzagRowReversed .workflowZigzagText {
+  order: 2;
+}
+
+/* Text block within zigzag row */
+.workflowZigzagText {
+  display: grid;
+  gap: 12px;
+}
+
+/* Icon panel — textured, layered, distinctive */
+.workflowZigzagIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 190px;
+  aspect-ratio: 1;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.6), transparent 50%),
+    radial-gradient(circle at 75% 70%, rgba(255, 190, 0, 0.15), transparent 45%),
+    linear-gradient(145deg, #fff6d5 0%, #ffd55a 52%, #f5c330 100%);
+  color: var(--ink-900);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 6px rgba(200, 160, 40, 0.12),
+    0 20px 40px rgba(255, 200, 50, 0.18),
+    0 6px 12px rgba(145, 111, 48, 0.08);
+  justify-self: center;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+
+/* Subtle noise texture overlay via pseudo-element */
+.workflowZigzagIcon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.workflowZigzagRow:hover .workflowZigzagIcon {
+  transform: scale(1.04) rotate(-1deg);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 6px rgba(200, 160, 40, 0.12),
+    0 24px 48px rgba(255, 200, 50, 0.24),
+    0 8px 16px rgba(145, 111, 48, 0.1);
+}
+
+.workflowZigzagIconInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workflowZigzagIconInner svg {
+  width: 56px;
+  height: 56px;
+  filter: drop-shadow(0 2px 4px rgba(120, 90, 20, 0.15));
+  transition: transform 0.35s ease;
+}
+
+.workflowZigzagRow:hover .workflowZigzagIconInner svg {
+  transform: scale(1.08);
+}
+
+/* Connector between steps — flowing gradient line with center dot */
+.workflowZigzagConnector {
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.workflowConnectorSvg {
+  opacity: 0.7;
+}
+
+/* Benefits strip — 3 equal columns with stagger */
+.workflowBenefitStrip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 44px;
+  padding-top: 36px;
+  border-top: 1px solid rgba(214, 187, 129, 0.18);
+}
+
+.workflowBenefitItem {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding: 24px 22px;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(251, 244, 229, 0.88) 100%);
+  border: 1px solid rgba(214, 187, 129, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 10px 28px rgba(145, 111, 48, 0.05);
+  opacity: 0;
+  animation: zigzagReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-play-state: paused;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.slide.active .workflowBenefitItem {
+  animation-play-state: running;
+}
+
+.workflowBenefitItem:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 16px 36px rgba(145, 111, 48, 0.09);
+}
+
+.workflowBenefitIndex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff2bf 0%, #ffd55a 100%);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-900);
+  box-shadow: 0 8px 18px rgba(255, 213, 90, 0.2);
+}
+
+.workflowBenefitTitle {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 22px;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  color: var(--ink-900);
+}
+
+.workflowBenefitDescription {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 15px;
+  line-height: 1.58;
+  color: rgba(51, 65, 85, 0.78);
+}
+
+.workflowStepNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 169, 110, 0.24);
+  background: rgba(255, 255, 255, 0.88);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(100, 116, 139, 0.88);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.workflowZigzagRow:hover .workflowStepNumber {
+  background: rgba(255, 248, 225, 0.95);
+  border-color: rgba(201, 169, 110, 0.4);
+}
+
+.workflowStepTitle {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--ink-900);
+}
+
+.workflowStepDescription {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(51, 65, 85, 0.78);
+  max-width: 38ch;
+}
+
+/* Proof card — full width, accent bar */
+.workflowProofCard {
+  position: relative;
+  overflow: hidden;
+  border-radius: 30px;
+  border: 1px solid rgba(214, 187, 129, 0.26);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(251, 244, 229, 0.9) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 18px 34px rgba(145, 111, 48, 0.07);
+  padding: 32px 32px 32px 38px;
+  margin-top: 28px;
+  opacity: 0;
+  animation: zigzagReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-play-state: paused;
+}
+
+.slide.active .workflowProofCard {
+  animation-play-state: running;
+}
+
+/* Gold accent bar on left edge */
+.workflowProofCard::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 0;
+  width: 5px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(180deg, #ffd55a 0%, rgba(255, 213, 90, 0.3) 100%);
+}
+
+.workflowSectionLabel {
+  margin: 0 0 16px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(139, 109, 56, 0.76);
+}
+
+.workflowProofTitle {
+  margin: 0;
+  font-family: "Lora", serif;
+  font-size: 26px;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--ink-900);
+}
+
+.workflowProofBody {
+  margin: 14px 0 0;
+  font-family: "Lora", serif;
+  font-size: 15px;
+  line-height: 1.64;
+  color: rgba(51, 65, 85, 0.78);
+  max-width: 56ch;
+}
+
+/* Reduced motion: skip all animations */
+@media (prefers-reduced-motion: reduce) {
+  .workflowZigzagRow,
+  .workflowBenefitItem,
+  .workflowProofCard {
+    opacity: 1;
+    animation: none;
+  }
+
+  .workflowZigzagRow:hover .workflowZigzagIcon {
+    transform: none;
+  }
+
+  .workflowBenefitItem:hover {
+    transform: none;
+  }
+}
+
+/* =====================
    GLOBAL SLIDE - editorial proof with globe
    ===================== */
 .globalSlideContent {
@@ -1447,6 +2132,14 @@
     padding-right: 60px;
   }
 
+  .slide:has(.supportSlideContent) {
+    padding-right: 60px;
+  }
+
+  .slide:has(.workflowSlideContent) {
+    padding-right: 60px;
+  }
+
   .heroSlide {
     padding: 80px 60px;
   }
@@ -1474,6 +2167,14 @@
     padding-right: 48px;
   }
 
+  .slide:has(.supportSlideContent) {
+    padding-right: 48px;
+  }
+
+  .slide:has(.workflowSlideContent) {
+    padding-right: 48px;
+  }
+
   .videoWrapper.minimized {
     width: 300px;
     height: 169px;
@@ -1493,6 +2194,71 @@
 
   .slide:has(.globalSlideContent) {
     padding-right: 32px;
+  }
+
+  .slide:has(.supportSlideContent) {
+    padding-right: 32px;
+  }
+
+  .slide:has(.workflowSlideContent) {
+    padding-right: 32px;
+  }
+
+  .supportSlideContent {
+    max-width: 100%;
+  }
+
+  .supportMasthead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .supportLayout {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .supportNarrativeColumn {
+    grid-column: 1 / -1;
+  }
+
+  .supportProofRail {
+    grid-column: 1 / -1;
+  }
+
+
+  .supportStatStack {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .workflowSlideContent {
+    max-width: 100%;
+  }
+
+
+  /* Tablet: no zigzag, icon-left text-right stacked */
+  .workflowZigzagRow,
+  .workflowZigzagRowReversed {
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    padding: 22px 20px;
+  }
+
+  .workflowZigzagRowReversed .workflowZigzagText {
+    order: unset;
+  }
+
+  .workflowZigzagIcon {
+    max-width: 140px;
+  }
+
+  .workflowStepTitle {
+    font-size: 24px;
+  }
+
+  .workflowProofTitle {
+    font-size: 24px;
   }
 
   .packageSlideContent {
@@ -1585,6 +2351,41 @@
     text-align: left;
   }
 
+  .supportLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .supportTimeline {
+    padding-left: 20px;
+  }
+
+  .supportTimeline::before {
+    left: 9px;
+  }
+
+  .supportStageCard::before {
+    left: -15px;
+  }
+
+  .supportProofRail {
+    grid-column: auto;
+  }
+
+  .supportStatStack {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .supportCardTitle {
+    font-size: 22px;
+  }
+
+  .supportIntro,
+  .supportStageDescription,
+  .supportListItem,
+  .supportNarrativeBody {
+    font-size: 15px;
+  }
+
   /* Hero slide - stack columns on tablet */
   .heroSlide {
     padding: 60px 32px 120px 32px;
@@ -1638,6 +2439,63 @@
   .slide {
     padding: 60px 24px 120px 24px; /* bottom clears the bar */
     min-height: 75vh;
+  }
+
+  /* Mobile: single column, icon above text */
+  .workflowZigzagRow,
+  .workflowZigzagRowReversed {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 20px 16px;
+  }
+
+  .workflowZigzagRowReversed .workflowZigzagText {
+    order: unset;
+  }
+
+  .workflowZigzagIcon {
+    max-width: 110px;
+    justify-self: center;
+    order: -1;
+    border-radius: 24px;
+  }
+
+  .workflowZigzagConnector {
+    height: 40px;
+  }
+
+  .workflowBenefitStrip {
+    grid-template-columns: 1fr;
+    margin-top: 32px;
+    padding-top: 28px;
+  }
+
+  .workflowBenefitItem {
+    padding: 18px;
+  }
+
+  .workflowProofCard {
+    border-radius: 24px;
+    padding: 22px 22px 22px 28px;
+  }
+
+  .workflowStepTitle {
+    font-size: 22px;
+  }
+
+  .workflowStepDescription {
+    font-size: 14px;
+    max-width: none;
+  }
+
+  .workflowBenefitTitle,
+  .workflowProofTitle {
+    font-size: 18px;
+  }
+
+  .workflowBenefitDescription,
+  .workflowProofBody {
+    font-size: 14px;
   }
 
   .packageGrid {
@@ -1739,6 +2597,7 @@
   .packageEyebrow::before {
     width: 30px;
   }
+
 
   .packageHeroDescription,
   .packageFormulaValue {
@@ -1938,6 +2797,69 @@
     font-size: 30px;
   }
 
+  .supportLayout {
+    gap: 16px;
+  }
+  .supportNarrativeCard,
+  .supportStageCard,
+  .supportProofCard,
+  .supportStatCard {
+    padding: 18px;
+  }
+
+  .supportTimeline {
+    padding-left: 18px;
+  }
+
+  .supportTimeline::before {
+    left: 8px;
+  }
+
+  .supportStageCard {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .supportStageCard::before {
+    left: -13px;
+    top: 24px;
+  }
+
+  .supportStageTop {
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .supportStatStack {
+    grid-template-columns: 1fr;
+  }
+
+  .supportIconWrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+
+  .supportCardTitle {
+    font-size: 18px;
+  }
+
+  .supportNarrativeTitle {
+    font-size: 20px;
+  }
+
+  .supportProofQuote {
+    font-size: 17px;
+  }
+
+  .supportIntro,
+  .supportStageDescription,
+  .supportListItem,
+  .supportNarrativeBody {
+    font-size: 14px;
+  }
+
   .slideHeadline {
     font-size: clamp(24px, 7vw, 32px);
   }
@@ -1982,6 +2904,7 @@
 
   .packageSlideContent,
   .globalSlideContent,
+  .supportSlideContent,
   .packageCard,
   .packageHeroValue {
     opacity: 1;
