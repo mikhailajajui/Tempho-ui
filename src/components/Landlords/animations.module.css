@@ -1,0 +1,168 @@
+.heroHeadlineLine {
+  opacity: 0;
+  transform: translateY(1.5rem);
+}
+
+.heroHeadlineLineVisible {
+  animation: heroHeadlineReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.heroNote {
+  opacity: 0;
+  transform: translateY(1rem) scale(0.98);
+}
+
+.heroNoteVisible {
+  animation:
+    heroNoteReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both,
+    heroFloat 6s ease-in-out infinite;
+}
+
+.heroFloat {
+  animation: heroFloat 7s ease-in-out infinite;
+}
+
+.sectionReveal {
+  opacity: 0;
+  transform: translateY(2rem);
+}
+
+.sectionRevealVisible {
+  animation: sectionReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cardReveal {
+  opacity: 0;
+  transform: translateY(1.25rem);
+}
+
+.cardRevealVisible {
+  animation: cardReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.zigzagReveal {
+  opacity: 0;
+  transform: translateY(1.75rem);
+}
+
+.zigzagRevealVisible {
+  animation: zigzagReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bounceArrow {
+  animation: bounceArrow 2s ease-in-out infinite;
+}
+
+.fadeInUpCenter {
+  animation: fadeInUpCenter 0.8s ease-out 0.35s both;
+}
+
+@keyframes heroHeadlineReveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroNoteReveal {
+  from {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.5rem);
+  }
+}
+
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zigzagReveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceArrow {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(0.5rem);
+  }
+  60% {
+    transform: translateY(0.25rem);
+  }
+}
+
+@keyframes fadeInUpCenter {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroHeadlineLine,
+  .heroNote,
+  .sectionReveal,
+  .cardReveal,
+  .zigzagReveal {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+  }
+
+  .heroFloat,
+  .bounceArrow,
+  .fadeInUpCenter {
+    animation: none !important;
+  }
+}

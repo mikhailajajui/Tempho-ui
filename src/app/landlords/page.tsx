@@ -1,5 +1,5 @@
 import { NavSection } from "../../components/NavSection";
-import { LandlordHeroSection } from "../../components/LandlordHeroSection";
+import { LandlordHeroSection } from "../../components/Landlords";
 import { HowItWorksSection } from "../../components/HowItWorksSection";
 import { WhyTempoSection } from "../../components/WhyTempoSection";
 import { ReviewsSection } from "../../components/ReviewsSection";
@@ -23,7 +23,11 @@ export default function LandlordsPage() {
       <LandlordHeroSection
         ctaLabel="List Property"
         ctaHref="/forms"
-        videoSrc="/hero-section/hero-video.mp4"
+        videoSrc={{
+          webm: "/hero-section/hero-video-720p.webm",
+          mp4: "/hero-section/hero-video-720p.mp4",
+        }}
+        videoPoster="/hero-section/hero-video-poster.jpg"
         slides={[
           {
             id: "intro",

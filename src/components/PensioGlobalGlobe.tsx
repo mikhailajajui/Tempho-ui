@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import globeGeoJson from "@/data/globe.json";
 import styles from "./PensioGlobalGlobe.module.css";
@@ -107,14 +107,21 @@ function traceContinentPaths(
   });
 }
 
-function generateContinentTexture() {
+let cachedTextureCanvas: HTMLCanvasElement | null = null;
+
+function generateContinentTextureCanvas(): HTMLCanvasElement {
+  if (cachedTextureCanvas) {
+    return cachedTextureCanvas;
+  }
+
+  // Reduced from 2048×1024 to 1024×512 — halves GPU memory and generation time
   const canvas = document.createElement("canvas");
-  canvas.width = 2048;
-  canvas.height = 1024;
+  canvas.width = 1024;
+  canvas.height = 512;
   const ctx = canvas.getContext("2d");
 
   if (!ctx) {
-    return null;
+    return canvas;
   }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -157,9 +164,6 @@ function generateContinentTexture() {
       });
     }
     ctx.save();
-    ctx.shadowColor = "rgba(150, 103, 37, 0.18)";
-    ctx.shadowBlur = 18;
-    ctx.shadowOffsetY = 6;
     ctx.fillStyle = fillGradient;
     ctx.fill("evenodd");
     ctx.fillStyle = ridgeGradient;
@@ -174,7 +178,8 @@ function generateContinentTexture() {
   traceContinentPaths(ctx, canvas.width, canvas.height);
   ctx.clip();
 
-  for (let i = 0; i < 2200; i += 1) {
+  // Reduced from 2200 to 800 dots — still dense enough at lower resolution
+  for (let i = 0; i < 800; i += 1) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
     const radius = Math.random() * 1.8 + 0.45;
@@ -185,7 +190,8 @@ function generateContinentTexture() {
     ctx.fill();
   }
 
-  for (let i = 0; i < 320; i += 1) {
+  // Reduced from 320 to 120 ridge lines
+  for (let i = 0; i < 120; i += 1) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
     const length = Math.random() * 24 + 10;
@@ -224,11 +230,16 @@ function generateContinentTexture() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.globalCompositeOperation = "source-over";
 
+  cachedTextureCanvas = canvas;
+  return canvas;
+}
+
+function createTextureFromCanvas(canvas: HTMLCanvasElement) {
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.wrapS = THREE.ClampToEdgeWrapping;
   texture.wrapT = THREE.ClampToEdgeWrapping;
-  texture.anisotropy = 4;
+  texture.anisotropy = 2; // Reduced from 4
   texture.needsUpdate = true;
   return texture;
 }
@@ -248,10 +259,75 @@ type PensioGlobalGlobeProps = {
   className?: string;
 };
 
+type WindowWithIdleCallback = Window & {
+  requestIdleCallback?: (
+    callback: IdleRequestCallback,
+    options?: IdleRequestOptions,
+  ) => number;
+  cancelIdleCallback?: (handle: number) => void;
+};
+
+const DASHES_PER_ARC = 14; // Reduced from 22
+
 export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    const mountNode = mountRef.current;
+
+    if (!mountNode || shouldLoad) {
+      return;
+    }
+
+    const idleWindow = window as WindowWithIdleCallback;
+    let idleHandle: number | null = null;
+
+    const scheduleLoad = () => {
+      if (idleWindow.requestIdleCallback) {
+        idleHandle = idleWindow.requestIdleCallback(() => {
+          setShouldLoad(true);
+        }, { timeout: 900 });
+        return;
+      }
+
+      idleHandle = window.setTimeout(() => {
+        setShouldLoad(true);
+      }, 120);
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        observer.disconnect();
+        scheduleLoad();
+      },
+      { rootMargin: "240px 0px", threshold: 0.01 },
+    );
+
+    observer.observe(mountNode);
+
+    return () => {
+      observer.disconnect();
+      if (idleHandle !== null) {
+        if (idleWindow.cancelIdleCallback) {
+          idleWindow.cancelIdleCallback(idleHandle);
+        } else {
+          window.clearTimeout(idleHandle);
+        }
+      }
+    };
+  }, [shouldLoad]);
+
+  useEffect(() => {
+    if (!shouldLoad) {
+      return;
+    }
+
     const mountNode = mountRef.current;
 
     if (!mountNode) {
@@ -259,33 +335,34 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
     }
 
     const rootStyles = getComputedStyle(document.documentElement);
-    const ink900 = rootStyles.getPropertyValue("--ink-900").trim() || "#0f172a";
-    const ink300 = rootStyles.getPropertyValue("--ink-300").trim() || "#cbd5e1";
     const yellow = rootStyles.getPropertyValue("--yellow-cta").trim() || "#FFD55A";
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const scene = new THREE.Scene();
-    // Transparent background to inherit slide colors
     scene.background = null;
 
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
     camera.position.set(0, 0.2, 5.8);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: false, // Disabled — saves ~50% GPU fill rate
+      powerPreference: "high-performance",
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Reduced from 1.75
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.setClearColor(0x000000, 0); // Fully transparent
+    renderer.setClearColor(0x000000, 0);
     mountNode.appendChild(renderer.domElement);
 
-    const globeCenterWorld = new THREE.Vector3();
-    const objectWorld = new THREE.Vector3();
-    const cameraDirection = new THREE.Vector3();
-    const objectDirection = new THREE.Vector3();
+    // Reusable vectors for visibility checks (allocated once)
+    const _globeCenter = new THREE.Vector3();
+    const _camDir = new THREE.Vector3();
+    const _objDir = new THREE.Vector3();
 
     // Store arc data for animation
     type ArcData = {
       curve: THREE.QuadraticBezierCurve3;
-      dashNodes: THREE.Mesh[];
+      instancedMesh: THREE.InstancedMesh;
       pulse: THREE.Mesh;
       pulseGlow?: THREE.Mesh;
       progress: number;
@@ -294,20 +371,46 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
       dashOffset: number;
     };
     const arcDataList: ArcData[] = [];
-    const continentTexture = generateContinentTexture();
 
-    const getFrontVisibility = (object: THREE.Object3D) => {
-      globeGroup.getWorldPosition(globeCenterWorld);
-      object.getWorldPosition(objectWorld);
+    // Globe core material — start without texture, apply async
+    const coreMaterial = new THREE.MeshPhongMaterial({
+      color: new THREE.Color("#ddd1bf"),
+      emissive: new THREE.Color("#c8b9a4"),
+      emissiveIntensity: 0.2,
+      shininess: 12,
+      transparent: true,
+      opacity: 0.97,
+    });
 
-      cameraDirection.copy(camera.position).sub(globeCenterWorld).normalize();
-      objectDirection.copy(objectWorld).sub(globeCenterWorld).normalize();
+    // Generate texture off the critical path
+    requestAnimationFrame(() => {
+      const textureCanvas = generateContinentTextureCanvas();
+      const texture = createTextureFromCanvas(textureCanvas);
+      coreMaterial.map = texture;
+      coreMaterial.needsUpdate = true;
+    });
 
-      const dot = objectDirection.dot(cameraDirection);
+    let hasMarkedReady = false;
+
+    // Visibility check using globe group world transform
+    const getFrontVisibility = (worldPos: THREE.Vector3) => {
+      _objDir.copy(worldPos).sub(_globeCenter).normalize();
+      const dot = _objDir.dot(_camDir);
       return THREE.MathUtils.smoothstep(dot, -0.06, 0.16);
     };
 
+    // Temp matrix/position/scale/quaternion for instanced mesh updates
+    const _mat4 = new THREE.Matrix4();
+    const _pos = new THREE.Vector3();
+    const _quat = new THREE.Quaternion();
+    const _scale = new THREE.Vector3();
+    const _color = new THREE.Color();
+
     const renderFrame = (elapsed: number) => {
+      // Compute camera direction once per frame
+      globeGroup.getWorldPosition(_globeCenter);
+      _camDir.copy(camera.position).sub(_globeCenter).normalize();
+
       // Animate pulsing rings at destinations
       rings.children.forEach((ringNode) => {
         const ring = ringNode as THREE.Mesh;
@@ -316,7 +419,8 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
           : 1 + ((Math.sin(elapsed * 1.8 + ring.userData.phase) + 1) / 2) * 0.75;
         ring.scale.setScalar(pulse);
         const ringMaterial = ring.material as THREE.MeshBasicMaterial;
-        const frontVisibility = getFrontVisibility(ring);
+        ring.getWorldPosition(_pos);
+        const frontVisibility = getFrontVisibility(_pos);
         ringMaterial.opacity = (reducedMotion
           ? 0.34
           : 0.18 + ((Math.sin(elapsed * 1.8 + ring.userData.phase) + 1) / 2) * 0.32) * frontVisibility;
@@ -327,12 +431,13 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
       markers.children.forEach((markerNode) => {
         const marker = markerNode as THREE.Mesh;
         const markerMaterial = marker.material as THREE.MeshBasicMaterial;
-        const frontVisibility = getFrontVisibility(marker);
+        marker.getWorldPosition(_pos);
+        const frontVisibility = getFrontVisibility(_pos);
         markerMaterial.opacity = (marker.userData.baseOpacity as number) * frontVisibility;
         marker.visible = frontVisibility > 0.02;
       });
 
-      // Animate traveling pulses along arcs
+      // Animate arcs using InstancedMesh
       arcDataList.forEach((arcData) => {
         if (!reducedMotion) {
           arcData.progress += arcData.speed;
@@ -344,51 +449,67 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
             arcData.dashOffset = 0;
           }
         } else {
-          arcData.progress = 0.5; // Static midpoint for reduced motion
+          arcData.progress = 0.5;
           arcData.dashOffset = 0.22;
         }
 
-        arcData.dashNodes.forEach((dashNode, index) => {
-          const dashProgress = (index / arcData.dashNodes.length + arcData.dashOffset) % 1;
+        const im = arcData.instancedMesh;
+        for (let i = 0; i < DASHES_PER_ARC; i++) {
+          const dashProgress = (i / DASHES_PER_ARC + arcData.dashOffset) % 1;
           const dashPoint = arcData.curve.getPoint(dashProgress);
-          dashNode.position.copy(dashPoint);
 
-          const dashMaterial = dashNode.material as THREE.MeshBasicMaterial;
+          // Transform dash point to world space for visibility check
+          _pos.copy(dashPoint);
+          globeGroup.localToWorld(_pos);
+          const frontVisibility = getFrontVisibility(_pos);
+
           const pulseBand = Math.sin(((dashProgress + arcData.progress) % 1) * Math.PI);
           const baseOpacity = 0.12 + Math.max(0, pulseBand) * 0.48;
-          const frontVisibility = getFrontVisibility(dashNode);
-          dashMaterial.opacity = (reducedMotion ? 0.18 : baseOpacity) * frontVisibility;
-          dashNode.visible = frontVisibility > 0.02;
-
           const dashScale = 0.75 + Math.max(0, pulseBand) * 0.9;
-          dashNode.scale.setScalar(dashScale);
-        });
 
-        // Get position along the curve
+          // Set instance transform
+          _mat4.compose(
+            dashPoint,
+            _quat,
+            _scale.setScalar(frontVisibility > 0.02 ? dashScale : 0), // scale to 0 = invisible
+          );
+          im.setMatrixAt(i, _mat4);
+
+          // Set instance color with opacity baked into alpha
+          const opacity = (reducedMotion ? 0.18 : baseOpacity) * frontVisibility;
+          _color.set(arcData.color);
+          // Approximate opacity via color brightness since InstancedMesh shares material
+          _color.multiplyScalar(opacity / 0.5);
+          im.setColorAt(i, _color);
+        }
+        im.instanceMatrix.needsUpdate = true;
+        if (im.instanceColor) im.instanceColor.needsUpdate = true;
+
+        // Traveling pulse
         const point = arcData.curve.getPoint(arcData.progress);
         arcData.pulse.position.copy(point);
         if (arcData.pulseGlow) {
           arcData.pulseGlow.position.copy(point);
         }
 
-        // Fade pulse based on position (brighter in middle)
         const fadeIn = Math.min(arcData.progress * 3, 1);
         const fadeOut = Math.min((1 - arcData.progress) * 3, 1);
         const opacity = fadeIn * fadeOut;
-        const pulseVisibility = getFrontVisibility(arcData.pulse);
+
+        _pos.copy(point);
+        globeGroup.localToWorld(_pos);
+        const pulseVisibility = getFrontVisibility(_pos);
 
         const pulseMaterial = arcData.pulse.material as THREE.MeshBasicMaterial;
         pulseMaterial.opacity = opacity * pulseVisibility;
         arcData.pulse.visible = pulseVisibility > 0.02;
 
         if (arcData.pulseGlow) {
-          const glowVisibility = getFrontVisibility(arcData.pulseGlow);
           const glowMaterial = arcData.pulseGlow.material as THREE.MeshBasicMaterial;
-          glowMaterial.opacity = opacity * 0.6 * glowVisibility;
-          arcData.pulseGlow.visible = glowVisibility > 0.02;
+          glowMaterial.opacity = opacity * 0.6 * pulseVisibility;
+          arcData.pulseGlow.visible = pulseVisibility > 0.02;
         }
 
-        // Scale pulse (larger in middle of journey)
         const scale = 1 + Math.sin(arcData.progress * Math.PI) * 0.5;
         arcData.pulse.scale.setScalar(scale);
         if (arcData.pulseGlow) {
@@ -398,11 +519,15 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
 
       if (reducedMotion) {
         globeGroup.rotation.set(0.04, 0.56, 0);
-        stars.rotation.y = -0.08;
         orbitRing.rotation.z = 0.24;
       }
 
       renderer.render(scene, camera);
+
+      if (!hasMarkedReady) {
+        hasMarkedReady = true;
+        setIsReady(true);
+      }
     };
 
     const resize = () => {
@@ -417,37 +542,24 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
     const globeGroup = new THREE.Group();
     scene.add(globeGroup);
 
-    // Warm lighting setup
-    const ambientLight = new THREE.AmbientLight("#fff8e7", 1.2);
-    const keyLight = new THREE.DirectionalLight("#fffaf0", 1.6);
+    // Warm lighting setup — reduced to 2 lights from 4
+    const ambientLight = new THREE.AmbientLight("#fff8e7", 1.4);
+    const keyLight = new THREE.DirectionalLight("#fffaf0", 1.8);
     keyLight.position.set(4, 3, 5);
-    const fillLight = new THREE.DirectionalLight(yellow, 0.5);
-    fillLight.position.set(-3, 1, 3);
-    const rimLight = new THREE.PointLight("#ffecd2", 0.8, 20);
-    rimLight.position.set(-4, -2, -3);
+    scene.add(ambientLight, keyLight);
 
-    scene.add(ambientLight, keyLight, fillLight, rimLight);
-
-    // Globe core - soft taupe/sand with warm undertone for contrast against cream background
+    // Globe core — reduced from 64×64 to 32×32 segments (8192 → 2048 triangles)
     const core = new THREE.Mesh(
-      new THREE.SphereGeometry(1.55, 64, 64),
-      new THREE.MeshPhongMaterial({
-        color: new THREE.Color("#ddd1bf"),
-        map: continentTexture ?? undefined,
-        emissive: new THREE.Color("#c8b9a4"),
-        emissiveIntensity: 0.2,
-        shininess: 12,
-        transparent: true,
-        opacity: 0.97,
-      }),
+      new THREE.SphereGeometry(1.55, 32, 32),
+      coreMaterial,
     );
     globeGroup.add(core);
 
-    // Grid lines - slightly visible for structure
+    // Grid lines — reduced segments
     const wireframe = new THREE.Mesh(
-      new THREE.SphereGeometry(1.56, 36, 18),
+      new THREE.SphereGeometry(1.56, 24, 12),
       new THREE.MeshBasicMaterial({
-        color: new THREE.Color("#c4b49a"),      // Darker gold-brown for visibility
+        color: new THREE.Color("#c4b49a"),
         wireframe: true,
         transparent: true,
         opacity: 0.2,
@@ -455,11 +567,11 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
     );
     globeGroup.add(wireframe);
 
-    // Warm atmosphere glow
+    // Warm atmosphere glow — reduced from 48×48 to 16×16
     const atmosphere = new THREE.Mesh(
-      new THREE.SphereGeometry(1.72, 48, 48),
+      new THREE.SphereGeometry(1.72, 16, 16),
       new THREE.MeshBasicMaterial({
-        color: new THREE.Color("#f5d78e"),      // Golden glow
+        color: new THREE.Color("#f5d78e"),
         transparent: true,
         opacity: 0.1,
         side: THREE.BackSide,
@@ -467,9 +579,9 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
     );
     globeGroup.add(atmosphere);
 
-    // Subtle outer glow ring
+    // Subtle outer glow ring — reduced from 64 to 32 segments
     const glowRing = new THREE.Mesh(
-      new THREE.RingGeometry(1.7, 2.1, 64),
+      new THREE.RingGeometry(1.7, 2.1, 32),
       new THREE.MeshBasicMaterial({
         color: new THREE.Color(yellow),
         transparent: true,
@@ -480,33 +592,9 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
     glowRing.rotation.x = Math.PI / 2;
     globeGroup.add(glowRing);
 
-    // Background particles (very subtle, warm gold tint)
-    const starsGeometry = new THREE.BufferGeometry();
-    const starPositions = new Float32Array(600);
-    for (let i = 0; i < starPositions.length; i += 3) {
-      const radius = THREE.MathUtils.randFloat(6, 12);
-      const theta = THREE.MathUtils.randFloat(0, Math.PI * 2);
-      const phi = Math.acos(THREE.MathUtils.randFloatSpread(2));
-
-      starPositions[i] = radius * Math.sin(phi) * Math.cos(theta);
-      starPositions[i + 1] = radius * Math.cos(phi);
-      starPositions[i + 2] = radius * Math.sin(phi) * Math.sin(theta);
-    }
-    starsGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
-    const stars = new THREE.Points(
-      starsGeometry,
-      new THREE.PointsMaterial({
-        color: new THREE.Color("#d4b87a"),      // Warm gold particles
-        size: 0.015,
-        transparent: true,
-        opacity: 0.25,
-      }),
-    );
-    scene.add(stars);
-
-    // Subtle orbit ring
+    // Subtle orbit ring — reduced torus segments
     const orbitRing = new THREE.Mesh(
-      new THREE.TorusGeometry(2.0, 0.008, 16, 200),
+      new THREE.TorusGeometry(2.0, 0.008, 8, 64),
       new THREE.MeshBasicMaterial({
         color: new THREE.Color("#d4b56a"),
         transparent: true,
@@ -519,36 +607,41 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
 
     const markers = new THREE.Group();
     const rings = new THREE.Group();
-    const arcs = new THREE.Group();
     const pulses = new THREE.Group();
-    globeGroup.add(markers, rings, arcs, pulses);
+    globeGroup.add(markers, rings, pulses);
 
-    // Create arcs with animated traveling pulses
+    // Shared geometries for dash nodes — ONE geometry for ALL dashes
+    const dashGeometry = new THREE.SphereGeometry(0.018, 6, 6); // Reduced from 10×10
+
+    // Create arcs with InstancedMesh for dashes (1 draw call per arc instead of 14)
     globeArcs.forEach((arc, index) => {
       const start = latLngToVector3(arc.startLat, arc.startLng, 1.58);
       const end = latLngToVector3(arc.endLat, arc.endLng, 1.58);
       const mid = start.clone().add(end).multiplyScalar(0.5).normalize().multiplyScalar(2.3 + (index % 2) * 0.15);
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
 
-      const dashNodes: THREE.Mesh[] = [];
-      for (let dashIndex = 0; dashIndex < 22; dashIndex += 1) {
-        const dash = new THREE.Mesh(
-          new THREE.SphereGeometry(0.018, 10, 10),
-          new THREE.MeshBasicMaterial({
-            color: new THREE.Color(arc.color),
-            transparent: true,
-            opacity: 0.2,
-          }),
-        );
-        dashNodes.push(dash);
-        arcs.add(dash);
+      // InstancedMesh: 1 draw call for all dashes in this arc
+      const dashMaterial = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(arc.color),
+        transparent: true,
+        opacity: 0.3,
+      });
+      const instancedMesh = new THREE.InstancedMesh(dashGeometry, dashMaterial, DASHES_PER_ARC);
+      instancedMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+      // Initialize instances
+      for (let i = 0; i < DASHES_PER_ARC; i++) {
+        const t = i / DASHES_PER_ARC;
+        const p = curve.getPoint(t);
+        _mat4.makeTranslation(p.x, p.y, p.z);
+        instancedMesh.setMatrixAt(i, _mat4);
       }
+      globeGroup.add(instancedMesh);
 
-      // Traveling pulse sphere - BRIGHT
+      // Traveling pulse sphere — reduced segments
       const pulse = new THREE.Mesh(
-        new THREE.SphereGeometry(0.04, 16, 16),   // Larger pulse
+        new THREE.SphereGeometry(0.04, 8, 8),
         new THREE.MeshBasicMaterial({
-          color: new THREE.Color("#ffffff"),      // White core for glow effect
+          color: new THREE.Color("#ffffff"),
           transparent: true,
           opacity: 1,
         }),
@@ -556,9 +649,9 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
       pulse.position.copy(start);
       pulses.add(pulse);
 
-      // Pulse glow (larger, colored)
+      // Pulse glow — reduced segments
       const pulseGlow = new THREE.Mesh(
-        new THREE.SphereGeometry(0.07, 12, 12),
+        new THREE.SphereGeometry(0.07, 8, 8),
         new THREE.MeshBasicMaterial({
           color: new THREE.Color(arc.color),
           transparent: true,
@@ -568,21 +661,20 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
       pulseGlow.position.copy(start);
       pulses.add(pulseGlow);
 
-      // Store arc data for animation (pulse and glow move together)
       arcDataList.push({
         curve,
-        dashNodes,
+        instancedMesh,
         pulse,
         pulseGlow,
-        progress: index * 0.16,                   // Stagger start positions
-        speed: 0.004 + Math.random() * 0.002,    // Slightly faster
+        progress: index * 0.16,
+        speed: 0.004 + Math.random() * 0.002,
         color: arc.color,
         dashOffset: index * 0.08,
       });
 
-      // Start marker (origin city)
+      // Start marker — reduced segments
       const startMarker = new THREE.Mesh(
-        new THREE.SphereGeometry(0.05, 16, 16),
+        new THREE.SphereGeometry(0.05, 8, 8),
         new THREE.MeshBasicMaterial({
           color: new THREE.Color(yellow),
           transparent: true,
@@ -593,9 +685,9 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
       startMarker.userData.baseOpacity = 0.95;
       markers.add(startMarker);
 
-      // End marker (destination city)
+      // End marker
       const endMarker = new THREE.Mesh(
-        new THREE.SphereGeometry(0.04, 16, 16),
+        new THREE.SphereGeometry(0.04, 8, 8),
         new THREE.MeshBasicMaterial({
           color: new THREE.Color(arc.color),
           transparent: true,
@@ -606,9 +698,9 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
       endMarker.userData.baseOpacity = 0.9;
       markers.add(endMarker);
 
-      // Destination rings (pulsing)
+      // Destination ring — reduced segments
       const ring = new THREE.Mesh(
-        new THREE.RingGeometry(0.08, 0.12, 32),
+        new THREE.RingGeometry(0.08, 0.12, 16),
         new THREE.MeshBasicMaterial({
           color: new THREE.Color(arc.color),
           transparent: true,
@@ -626,20 +718,42 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
 
     const clock = new THREE.Clock();
     let frameId = 0;
+    let isInViewport = true;
+    let isTabVisible = true;
+
+    const shouldAnimate = () => isInViewport && isTabVisible;
 
     resize();
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(mountNode);
 
+    const startLoop = () => {
+      if (!shouldAnimate() || reducedMotion || frameId) return;
+      clock.start();
+      frameId = window.requestAnimationFrame(animate);
+    };
+
+    const stopLoop = () => {
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+        frameId = 0;
+      }
+      clock.stop();
+    };
+
     const animate = () => {
+      if (!shouldAnimate()) {
+        stopLoop();
+        return;
+      }
+
       const delta = clock.getDelta();
       const elapsed = clock.getElapsedTime();
       const rotationStep = 0.12 * delta;
 
       globeGroup.rotation.y += rotationStep;
       globeGroup.rotation.x = Math.sin(elapsed * 0.3) * 0.06;
-      stars.rotation.y -= 0.015 * delta;
       orbitRing.rotation.z += 0.06 * delta;
       glowRing.rotation.z -= 0.03 * delta;
 
@@ -649,16 +763,40 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
 
     renderFrame(0);
 
+    // Pause when globe scrolls off-screen
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        isInViewport = entry.isIntersecting;
+        if (isInViewport) startLoop(); else stopLoop();
+      },
+      { threshold: 0.01 },
+    );
+    visibilityObserver.observe(mountNode);
+
+    // Pause when user switches tabs
+    const onVisibilityChange = () => {
+      isTabVisible = document.visibilityState === "visible";
+      if (isTabVisible) startLoop(); else stopLoop();
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     if (!reducedMotion) {
       animate();
     }
 
     return () => {
+      isInViewport = false;
+      isTabVisible = false;
       if (frameId) {
         window.cancelAnimationFrame(frameId);
       }
       resizeObserver.disconnect();
-      mountNode.removeChild(renderer.domElement);
+      visibilityObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      if (mountNode.contains(renderer.domElement)) {
+        mountNode.removeChild(renderer.domElement);
+      }
+      dashGeometry.dispose();
       scene.traverse((object) => {
         const disposableObject = object as THREE.Object3D & {
           geometry?: THREE.BufferGeometry;
@@ -676,14 +814,53 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
           material.dispose();
         }
       });
-      continentTexture?.dispose();
+      coreMaterial.map?.dispose();
       renderer.dispose();
     };
-  }, []);
+  }, [shouldLoad]);
 
   return (
     <div className={[styles.globeShell, className].filter(Boolean).join(" ")}>
-      <div ref={mountRef} className={styles.globeCanvas} aria-hidden="true" />
+      <div
+        className={[
+          styles.globePoster,
+          isReady && styles.globePosterHidden,
+        ].filter(Boolean).join(" ")}
+        aria-hidden="true"
+      >
+        <div className={styles.posterGlow} />
+        <div className={styles.posterOrbit} />
+        <div className={styles.posterSphere}>
+          <div className={styles.posterSphereInner}>
+            <div className={styles.posterMap} />
+            <div className={styles.posterGrid} />
+          </div>
+        </div>
+        <svg
+          className={styles.posterRoutes}
+          viewBox="0 0 640 420"
+          fill="none"
+          preserveAspectRatio="none"
+        >
+          <path d="M170 246C218 152 321 128 410 184" />
+          <path d="M198 270C286 116 454 118 518 204" />
+          <path d="M132 218C218 88 414 80 552 166" />
+        </svg>
+        <div className={[styles.posterMarker, styles.posterMarkerA].join(" ")} />
+        <div className={[styles.posterMarker, styles.posterMarkerB].join(" ")} />
+        <div className={[styles.posterMarker, styles.posterMarkerC].join(" ")} />
+        <div className={[styles.posterPulse, styles.posterPulseA].join(" ")} />
+        <div className={[styles.posterPulse, styles.posterPulseB].join(" ")} />
+      </div>
+      <div
+        ref={mountRef}
+        className={[
+          styles.globeCanvas,
+          shouldLoad && styles.globeCanvasLoading,
+          isReady && styles.globeCanvasReady,
+        ].filter(Boolean).join(" ")}
+        aria-hidden="true"
+      />
     </div>
   );
 }

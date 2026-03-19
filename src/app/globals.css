@@ -5,11 +5,26 @@
 @theme {
   --font-family-sans: "Space Grotesk", "Segoe UI", sans-serif;
   --font-family-display: "Abril Fatface", cursive;
+  --font-family-serif: "Lora", serif;
+  --color-yellow-cta: #ffd55a;
+  --color-yellow-cta-dark: #f4a300;
+  --color-ink-soft: rgba(15, 23, 42, 0.7);
+  --color-body-muted: rgba(51, 65, 85, 0.78);
+  --breakpoint-xs: 30rem;
+  --breakpoint-desktop: 68.75rem;
 }
 
 :root {
   --font-family-sans: "Space Grotesk", "Segoe UI", sans-serif;
   --font-family-display: "Abril Fatface", cursive;
+  --font-family-serif: "Lora", serif;
+  --ink-900: #0f172a;
+  --ink-700: #334155;
+  --ink-500: #64748b;
+  --ink-300: #cbd5e1;
+  --yellow-cta: #ffd55a;
+  --color-ink-soft: rgba(15, 23, 42, 0.7);
+  --color-body-muted: rgba(51, 65, 85, 0.78);
 }
 
 body {
@@ -22,6 +37,116 @@ html,
 body {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
+}
+
+@layer components {
+  .ll-eyebrow {
+    @apply font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-slate-700;
+  }
+
+  .ll-eyebrow-bar {
+    @apply inline-flex items-center gap-3 font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-slate-700;
+  }
+
+  .ll-eyebrow-bar::before {
+    content: "";
+    @apply block h-0.5 w-[42px] rounded-full;
+    background: linear-gradient(90deg, #ffcf52, #f4a300);
+    box-shadow: 0 6px 18px rgba(255, 213, 90, 0.22);
+  }
+
+  .ll-headline {
+    @apply m-0 leading-tight text-slate-900;
+    font-family: var(--font-family-display);
+    font-size: clamp(32px, 3.9vw, 52px);
+  }
+
+  .ll-text-gold {
+    @apply ml-[0.18em] inline-block px-[0.08em];
+    color: #d89b00;
+    background: linear-gradient(135deg, #ffcf52, #f4a300);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .ll-body {
+    @apply m-0 font-serif text-[15px] leading-relaxed;
+    color: var(--color-body-muted);
+  }
+
+  .ll-intro {
+    @apply m-0 font-serif text-base leading-[1.52];
+    color: var(--color-ink-soft);
+  }
+
+  .ll-card {
+    @apply relative flex cursor-default flex-col gap-2.5 rounded-[22px] border transition-[transform,border-color,box-shadow] duration-200 ease-out;
+    border-color: rgba(191, 171, 135, 0.34);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 246, 238, 0.94));
+    box-shadow:
+      0 10px 30px rgba(71, 52, 18, 0.07),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  }
+
+  .ll-card:hover {
+    @apply -translate-y-1;
+    border-color: rgba(191, 151, 65, 0.42);
+    box-shadow:
+      0 18px 34px rgba(71, 52, 18, 0.11),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  }
+
+  .ll-pill {
+    @apply inline-flex min-h-[28px] items-center justify-center rounded-full border px-2.5 font-sans text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500/90;
+    border-color: rgba(201, 169, 110, 0.24);
+    background: rgba(255, 255, 255, 0.88);
+  }
+
+  .ll-icon-wrap {
+    @apply inline-flex shrink-0 items-center justify-center rounded-full;
+    background: linear-gradient(180deg, #fff5d5, #ffe8a0);
+    color: #6e4f10;
+    box-shadow: 0 8px 18px rgba(250, 204, 21, 0.18);
+  }
+
+  .ll-slide-number {
+    @apply rounded-full bg-yellow-cta px-5 py-2 font-sans text-sm font-semibold tracking-[0.05em] text-slate-900;
+  }
+
+  .ll-warm-bg {
+    background:
+      radial-gradient(circle at 18% 24%, rgba(255, 213, 90, 0.16), transparent 24%),
+      linear-gradient(180deg, #fffdf9 0%, #fff8ee 48%, #ffffff 100%);
+  }
+
+  .ll-stat-value {
+    @apply m-0 leading-none;
+    font-family: var(--font-family-display);
+    color: #b87b00;
+  }
+
+  .ll-stat-label {
+    @apply font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-700/90;
+  }
+
+  .ll-cta {
+    @apply relative inline-flex overflow-hidden rounded-full bg-yellow-cta font-serif text-slate-900 no-underline transition-transform duration-200 ease-out;
+    padding: 20px 56px;
+    font-size: clamp(18px, 2vw, 22px);
+    box-shadow: 0 10px 30px rgba(255, 213, 90, 0.3);
+  }
+
+  .ll-cta:hover {
+    @apply -translate-y-[3px];
+    box-shadow: 0 14px 40px rgba(255, 213, 90, 0.4);
+  }
+
+  .ll-bullet {
+    @apply h-2.5 w-2.5 rounded-full;
+    background: linear-gradient(135deg, #ffd55a, #f4a300);
+    box-shadow: 0 0 0 4px rgba(255, 213, 90, 0.14);
+  }
 }
 
 /* Force Google Maps Autocomplete dropdown to be on top */
