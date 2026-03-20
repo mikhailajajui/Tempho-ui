@@ -1,13 +1,37 @@
+import dynamic from "next/dynamic";
 import { NavSection } from "../../components/NavSection";
-import { LandlordHeroSection } from "../../components/Landlords";
-import { HowItWorksSection } from "../../components/HowItWorksSection";
-import { WhyTempoSection } from "../../components/WhyTempoSection";
-import { ReviewsSection } from "../../components/ReviewsSection";
-import { PartnersSection } from "../../components/PartnersSection";
-import { GetMatchedSection } from "../../components/GetMatchedSection";
-import { FooterImageSection } from "../../components/FooterImageSection";
+import { LandlordHeroSection, ScrollSnapSection } from "../../components/Landlords";
+
+// Lazy load below-fold sections for faster initial page load
+const HowItWorksSection = dynamic(
+  () => import("../../components/HowItWorksSection").then((mod) => mod.HowItWorksSection),
+  { ssr: true }
+);
+const WhyTempoSection = dynamic(
+  () => import("../../components/WhyTempoSection").then((mod) => mod.WhyTempoSection),
+  { ssr: true }
+);
+const ReviewsSection = dynamic(
+  () => import("../../components/ReviewsSection").then((mod) => mod.ReviewsSection),
+  { ssr: true }
+);
+const PartnersSection = dynamic(
+  () => import("../../components/PartnersSection").then((mod) => mod.PartnersSection),
+  { ssr: true }
+);
+const GetMatchedSection = dynamic(
+  () => import("../../components/GetMatchedSection").then((mod) => mod.GetMatchedSection),
+  { ssr: true }
+);
+const FooterImageSection = dynamic(
+  () => import("../../components/FooterImageSection").then((mod) => mod.FooterImageSection),
+  { ssr: true }
+);
 
 export default function LandlordsPage() {
+  // Slide indexes: 0 = video spacer, 1-5 = content slides, 6+ = below-fold
+  const belowFoldStart = 6;
+
   return (
     <main>
       <NavSection
@@ -199,13 +223,39 @@ export default function LandlordsPage() {
             ],
           },
         ]}
-      />
-      <HowItWorksSection />
-      <WhyTempoSection />
-      <ReviewsSection />
-      <PartnersSection />
-      <GetMatchedSection />
-      <FooterImageSection />
+      >
+        {/* Below-fold sections rendered inside scroll-snap container */}
+        <ScrollSnapSection index={belowFoldStart} background="bg-white">
+          <div className="w-full">
+            <HowItWorksSection />
+          </div>
+        </ScrollSnapSection>
+        <ScrollSnapSection index={belowFoldStart + 1} background="bg-white">
+          <div className="w-full">
+            <WhyTempoSection />
+          </div>
+        </ScrollSnapSection>
+        <ScrollSnapSection index={belowFoldStart + 2} background="bg-white">
+          <div className="w-full">
+            <ReviewsSection />
+          </div>
+        </ScrollSnapSection>
+        <ScrollSnapSection index={belowFoldStart + 3} background="bg-white">
+          <div className="w-full">
+            <PartnersSection />
+          </div>
+        </ScrollSnapSection>
+        <ScrollSnapSection index={belowFoldStart + 4} background="bg-white">
+          <div className="w-full">
+            <GetMatchedSection />
+          </div>
+        </ScrollSnapSection>
+        <ScrollSnapSection index={belowFoldStart + 5} background="bg-white">
+          <div className="w-full">
+            <FooterImageSection />
+          </div>
+        </ScrollSnapSection>
+      </LandlordHeroSection>
     </main>
   );
 }

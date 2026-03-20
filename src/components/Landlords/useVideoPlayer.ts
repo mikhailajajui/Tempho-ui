@@ -35,14 +35,27 @@ export function useVideoPlayer() {
       }
     };
 
-    if (video.readyState >= 2) {
-      void attemptAutoplay();
-    } else {
-      const onCanPlay = () => {
+    // Defer video loading until after initial paint for smoother LCP
+    const startLoading = () => {
+      video.preload = "auto";
+      video.load();
+
+      if (video.readyState >= 2) {
         void attemptAutoplay();
-        video.removeEventListener("canplay", onCanPlay);
-      };
-      video.addEventListener("canplay", onCanPlay);
+      } else {
+        const onCanPlay = () => {
+          void attemptAutoplay();
+          video.removeEventListener("canplay", onCanPlay);
+        };
+        video.addEventListener("canplay", onCanPlay);
+      }
+    };
+
+    // Use requestIdleCallback for non-critical loading, fallback to setTimeout
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(startLoading, { timeout: 2000 });
+    } else {
+      setTimeout(startLoading, 100);
     }
   }, []);
 

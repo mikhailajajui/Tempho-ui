@@ -19,7 +19,7 @@ const PensioGlobalGlobe = dynamic(
   },
 );
 
-export function GlobalSlide({ slide, index, isActive }: SlideComponentProps) {
+export function GlobalSlide({ slide, index, isActive, eagerGlobe }: SlideComponentProps & { eagerGlobe?: boolean }) {
   return (
     <div className="mx-auto grid w-full max-w-[1240px] gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
       <div className="max-w-[35rem]">
@@ -74,7 +74,7 @@ export function GlobalSlide({ slide, index, isActive }: SlideComponentProps) {
           </div>
 
           <div className="rounded-[2rem] border border-white/80 bg-[radial-gradient(circle_at_center,rgba(255,239,196,0.55),transparent_68%),linear-gradient(180deg,#fffefb,#fdf7ea)] p-2 pt-20 md:p-5 md:pt-24">
-            <PensioGlobalGlobe className="h-[22rem] w-full md:h-[30rem]" />
+            <PensioGlobalGlobe className="h-[22rem] w-full md:h-[30rem]" eager={eagerGlobe} />
           </div>
 
           <div

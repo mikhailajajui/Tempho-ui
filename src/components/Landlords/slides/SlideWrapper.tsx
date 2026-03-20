@@ -2,7 +2,6 @@
 
 import type { ReactNode, RefCallback } from "react";
 import clsx from "clsx";
-import { motion } from "motion/react";
 
 type SlideWrapperProps = {
   children: ReactNode;
@@ -20,19 +19,18 @@ export function SlideWrapper({
   sectionRef,
 }: SlideWrapperProps) {
   return (
-    <motion.section
+    <section
       ref={sectionRef}
       className={clsx(
         "relative flex items-center overflow-hidden bg-white",
+        "transition-opacity duration-[350ms] ease-out",
+        isActive ? "opacity-100" : "opacity-[0.72]",
         backgroundClassName,
         className,
       )}
-      initial={{ opacity: 0.65 }}
-      animate={{ opacity: isActive ? 1 : 0.72 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
       data-active={isActive ? "true" : "false"}
     >
       {children}
-    </motion.section>
+    </section>
   );
 }

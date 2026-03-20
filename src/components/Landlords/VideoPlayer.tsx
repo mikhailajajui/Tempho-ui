@@ -38,7 +38,6 @@ export function VideoPlayer({
       className={clsx(
         "fixed z-50 overflow-hidden bg-[#0f172a]",
         "transition-[top,left,width,height,border-radius,box-shadow,border] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
-        "will-change-[top,left,width,height,border-radius,box-shadow]",
         isMinimized
           ? isMobile
             ? "top-[calc(100dvh-88px)] left-0 h-[88px] w-full rounded-none border-t-2 border-t-white/12 shadow-[0_-8px_32px_rgba(0,0,0,0.25)]"
@@ -55,7 +54,7 @@ export function VideoPlayer({
         poster={videoPoster}
         loop
         playsInline
-        preload="metadata"
+        preload="none"
       >
         {sources.webm && (
           <source src={sources.webm} type="video/webm" />

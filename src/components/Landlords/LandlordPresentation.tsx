@@ -70,7 +70,7 @@ export function LandlordPresentation({
   const containerRef = useRef<HTMLDivElement>(null);
   const slideRefs = useRef<(HTMLElement | null)[]>([]);
   const isMobile = useMobileDetect();
-  const { activeSlide, isVideoMinimized } = useScrollPresentation(
+  const { activeSlide, isVideoMinimized, scrollToPhase } = useScrollPresentation(
     containerRef,
     slideRefs,
   );
@@ -109,8 +109,46 @@ export function LandlordPresentation({
   const heroSlideSpacing =
     "min-h-screen px-20 py-[100px] max-[1280px]:px-[60px] max-[1280px]:py-20 max-[1024px]:min-h-[80vh] max-[1024px]:px-8 max-[1024px]:py-[60px] max-[1024px]:pb-[120px] max-[768px]:min-h-[75vh] max-[768px]:px-6 max-[768px]:py-[60px] max-[768px]:pb-[120px]";
 
+  // Navigation dots for slide indicators
+  const NavigationDots = () => (
+    <nav
+      className={clsx(
+        "fixed right-6 top-1/2 z-[60] flex -translate-y-1/2 flex-col gap-3 transition-opacity duration-300",
+        isVideoMinimized ? "opacity-100" : "pointer-events-none opacity-0",
+        "max-[1024px]:right-4 max-[768px]:bottom-6 max-[768px]:right-1/2 max-[768px]:top-auto max-[768px]:translate-x-1/2 max-[768px]:translate-y-0 max-[768px]:flex-row",
+      )}
+      aria-label="Section navigation"
+    >
+      {slides.map((slide, index) => (
+        <button
+          key={slide.id}
+          onClick={() => scrollToPhase(index)}
+          className={clsx(
+            "group relative h-3 w-3 rounded-full border-2 transition-all duration-300",
+            activeSlide === index
+              ? "scale-125 border-[#ffd55a] bg-[#ffd55a]"
+              : "border-slate-300 bg-white hover:border-[#ffd55a] hover:bg-[#ffd55a]/20",
+          )}
+          aria-label={`Go to section ${index + 1}: ${slide.headline || slide.id}`}
+          aria-current={activeSlide === index ? "true" : undefined}
+        >
+          <span
+            className={clsx(
+              "absolute left-full ml-3 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100",
+              "max-[768px]:bottom-full max-[768px]:left-1/2 max-[768px]:mb-2 max-[768px]:ml-0 max-[768px]:-translate-x-1/2",
+            )}
+          >
+            {slide.headline?.split("\n")[0] || `Section ${index + 1}`}
+          </span>
+        </button>
+      ))}
+    </nav>
+  );
+
   return (
     <div ref={containerRef} className="relative w-full bg-white">
+      <NavigationDots />
+
       <VideoPlayer
         videoRef={videoRef}
         videoSrc={videoSrc}
