@@ -257,6 +257,8 @@ function latLngToVector3(lat: number, lng: number, radius: number) {
 
 type PensioGlobalGlobeProps = {
   className?: string;
+  /** Skip IntersectionObserver gate and initialize Three.js immediately */
+  eager?: boolean;
 };
 
 type WindowWithIdleCallback = Window & {
@@ -269,7 +271,7 @@ type WindowWithIdleCallback = Window & {
 
 const DASHES_PER_ARC = 14; // Reduced from 22
 
-export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
+export function PensioGlobalGlobe({ className, eager = false }: PensioGlobalGlobeProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -279,6 +281,32 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
 
     if (!mountNode || shouldLoad) {
       return;
+    }
+
+    // Eager mode: skip IntersectionObserver, init immediately via idle callback
+    if (eager) {
+      const idleWindow = window as WindowWithIdleCallback;
+      let idleHandle: number | null = null;
+
+      if (idleWindow.requestIdleCallback) {
+        idleHandle = idleWindow.requestIdleCallback(() => {
+          setShouldLoad(true);
+        }, { timeout: 900 });
+      } else {
+        idleHandle = window.setTimeout(() => {
+          setShouldLoad(true);
+        }, 120);
+      }
+
+      return () => {
+        if (idleHandle !== null) {
+          if (idleWindow.cancelIdleCallback) {
+            idleWindow.cancelIdleCallback(idleHandle);
+          } else {
+            window.clearTimeout(idleHandle);
+          }
+        }
+      };
     }
 
     const idleWindow = window as WindowWithIdleCallback;
@@ -321,7 +349,7 @@ export function PensioGlobalGlobe({ className }: PensioGlobalGlobeProps) {
         }
       }
     };
-  }, [shouldLoad]);
+  }, [shouldLoad, eager]);
 
   useEffect(() => {
     if (!shouldLoad) {

@@ -14,13 +14,13 @@ type VideoHeroSectionProps = {
 
 export function VideoHeroSection({ videoSrc, videoPoster, onVideoReady }: VideoHeroSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { activeIndex, scrollToSection } = useScrollSnap();
+  const { activeIndex, hasScrolled, scrollToSection } = useScrollSnap();
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
 
-  const isMinimized = activeIndex > 0;
+  const isMinimized = activeIndex > 0 || hasScrolled;
   const sources = typeof videoSrc === "string" ? { mp4: videoSrc } : videoSrc;
 
   // Auto-play video when component mounts
@@ -91,7 +91,7 @@ export function VideoHeroSection({ videoSrc, videoPoster, onVideoReady }: VideoH
         "fixed z-50 overflow-hidden bg-[#0f172a]",
         "transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
         isMinimized
-          ? "bottom-6 right-6 h-[203px] w-[360px] cursor-pointer rounded-2xl border-[3px] border-white/95 shadow-2xl max-[1100px]:h-[169px] max-[1100px]:w-[300px] max-[768px]:bottom-[4.5rem] max-[768px]:right-3 max-[768px]:h-[100px] max-[768px]:w-[178px] max-[768px]:rounded-xl"
+          ? "bottom-0 left-0 right-0 h-[72px] w-full rounded-none border-t border-white/20 md:bottom-6 md:left-auto md:right-6 md:h-[203px] md:w-[360px] md:rounded-2xl md:border-[3px] md:border-white/95 md:border-t-white/95 max-[1100px]:md:h-[169px] max-[1100px]:md:w-[300px] cursor-pointer shadow-2xl"
           : "inset-0 pointer-events-none"
       )}
       onClick={isMinimized ? expandVideo : undefined}
@@ -100,7 +100,7 @@ export function VideoHeroSection({ videoSrc, videoPoster, onVideoReady }: VideoH
     >
       <video
         ref={videoRef}
-        className="h-full w-full object-cover"
+        className="h-full w-full object-contain md:object-cover"
         poster={videoPoster}
         loop
         playsInline
@@ -114,7 +114,7 @@ export function VideoHeroSection({ videoSrc, videoPoster, onVideoReady }: VideoH
       <div
         className={clsx(
           "absolute z-[60] flex gap-2 pointer-events-auto transition-all duration-300",
-          isMinimized ? "bottom-2 right-2 gap-1.5" : "bottom-5 right-5"
+          isMinimized ? "top-1/2 right-3 -translate-y-1/2 gap-1.5 md:top-auto md:bottom-2 md:right-2 md:translate-y-0" : "bottom-5 right-5"
         )}
         onClick={(e) => e.stopPropagation()}
       >

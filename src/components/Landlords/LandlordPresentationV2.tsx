@@ -101,7 +101,7 @@ export function LandlordPresentationV2({
       {/* Video spacer - first snap point */}
       <ScrollSnapSection
         index={0}
-        className="pointer-events-none"
+        className="pointer-events-none !min-h-dvh"
         background="bg-transparent"
       >
         <div className="h-full w-full" />

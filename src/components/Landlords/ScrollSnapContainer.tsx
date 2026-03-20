@@ -9,9 +9,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import clsx from "clsx";
 
 type ScrollSnapContextValue = {
   activeIndex: number;
+  hasScrolled: boolean;
   totalSections: number;
   scrollToSection: (index: number) => void;
   registerSection: (index: number, element: HTMLElement) => void;
@@ -42,6 +44,7 @@ export function ScrollSnapContainer({
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<Map<number, HTMLElement>>(new Map());
   const [activeIndex, setActiveIndex] = useState(0);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [totalSections, setTotalSections] = useState(0);
 
   const registerSection = useCallback((index: number, element: HTMLElement) => {
@@ -75,7 +78,7 @@ export function ScrollSnapContainer({
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
             const index = Array.from(sections.entries()).find(
               ([, el]) => el === entry.target
             )?.[0];
@@ -86,17 +89,31 @@ export function ScrollSnapContainer({
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 }
     );
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
   }, [totalSections]);
 
+  // Track scroll position for early video minimize on mobile
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      setHasScrolled(container.scrollTop > 50);
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <ScrollSnapContext.Provider
       value={{
         activeIndex,
+        hasScrolled,
         totalSections,
         scrollToSection,
         registerSection,
@@ -105,13 +122,7 @@ export function ScrollSnapContainer({
     >
       <div
         ref={containerRef}
-        className={className}
-        style={{
-          height: "100dvh",
-          overflowY: "auto",
-          scrollSnapType: "y mandatory",
-          scrollBehavior: "smooth",
-        }}
+        className={clsx("scroll-smooth overflow-y-auto h-dvh [scroll-snap-type:y_proximity] md:[scroll-snap-type:y_mandatory]", className)}
       >
         {children}
       </div>

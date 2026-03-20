@@ -17,7 +17,7 @@ export function NavigationDots({ labels = [], show = true }: NavigationDotsProps
     <nav
       className={clsx(
         "fixed right-6 top-1/2 z-[60] flex -translate-y-1/2 flex-col gap-3",
-        "max-[768px]:bottom-3 max-[768px]:left-3 max-[768px]:right-auto max-[768px]:top-auto",
+        "max-[768px]:bottom-[84px] max-[768px]:left-3 max-[768px]:right-auto max-[768px]:top-auto",
         "max-[768px]:translate-x-0 max-[768px]:translate-y-0 max-[768px]:flex-col max-[768px]:gap-2"
       )}
       aria-label="Section navigation"

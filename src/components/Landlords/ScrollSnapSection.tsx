@@ -33,13 +33,13 @@ export function ScrollSnapSection({
     <section
       ref={ref}
       className={clsx(
-        "relative flex min-h-dvh w-full items-center",
+        "relative flex min-h-fit md:min-h-dvh w-full md:items-center",
         "transition-opacity duration-300 ease-out",
+        "[scroll-snap-align:start] md:[scroll-snap-stop:always]",
         isActive ? "opacity-100" : "opacity-80",
         background,
         className
       )}
-      style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}
       data-section-index={index}
       data-active={isActive}
     >
