@@ -7,7 +7,9 @@ import animations from "../animations.module.css";
 import { renderGlobalHeadline } from "../headline-renderers";
 import type { SlideComponentProps } from "../types";
 
-const PensioGlobalGlobe = dynamic(
+type GlobeProps = { className?: string; eager?: boolean };
+
+const PensioGlobalGlobe = dynamic<GlobeProps>(
   () => import("../../PensioGlobalGlobe").then((mod) => mod.PensioGlobalGlobe),
   {
     ssr: false,
