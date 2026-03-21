@@ -11,3 +11,4 @@ yarn-error.log*
 docs/ui
 .claude/
 .agents/
+.codex/

@@ -23,9 +23,37 @@ export function BoltIcon() {
 export function HomeShieldIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M3 11.2L12 4l9 7.2" />
-      <path d="M5.5 9.8V20h13V9.8" />
-      <path d="M12 10.5l3 1.4v2.5c0 2.1-1.2 4-3 5-1.8-1-3-2.9-3-5v-2.5l3-1.4z" />
+      <path d="M3.5 10.8L12 4l8.5 6.8" />
+      <path d="M5.5 9.8V19.5h13V9.8" />
+      <path d="M8.2 13h4.3" />
+      <path d="M8.2 15.8h3.1" />
+      <path d="M14.4 12.2l1.5 1.5 2.8-2.9" />
+    </svg>
+  );
+}
+
+export function AgreementDocumentIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19V5A1.5 1.5 0 0 1 7.5 3.5z" />
+      <path d="M14 3.5V8h4" />
+      <path d="M8.5 11h7" />
+      <path d="M8.5 13.8h5.5" />
+      <path d="M9.2 17l1.5 1.5 3-3.2" />
+    </svg>
+  );
+}
+
+export function LeaseSignatureIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6.5 4.5h8l3 3V18a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 6.5 18z" />
+      <path d="M14.5 4.5v3h3" />
+      <path d="M8.7 10.3h6.3" />
+      <path d="M8.7 13.1h4.4" />
+      <path d="M8.4 16.7c1.2-1.7 2.1-2.4 2.9-2.4.7 0 1.1.6 1.7 1.2.5.5.9.9 1.5.9.5 0 1-.2 1.5-.7" />
+      <path d="M14.8 18.2l2.7-2.7" />
+      <path d="M17.9 14.9l1.3 1.3" />
     </svg>
   );
 }
@@ -107,8 +135,8 @@ export function renderSupportIcon(icon?: SupportIcon): ReactNode {
 
 export function renderWorkflowIcon(icon?: WorkflowIcon): ReactNode {
   if (icon === "listing") return <HomeShieldIcon />;
-  if (icon === "agreement") return <ShieldIcon />;
-  if (icon === "lease") return <CheckBadgeIcon />;
+  if (icon === "agreement") return <AgreementDocumentIcon />;
+  if (icon === "lease") return <LeaseSignatureIcon />;
   return <BoltIcon />;
 }
 

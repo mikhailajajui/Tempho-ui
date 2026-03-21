@@ -1,0 +1,387 @@
+.sectionShell {
+  position: relative;
+  overflow: hidden;
+  padding: 48px 24px 72px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 213, 90, 0.22), transparent 24%),
+    radial-gradient(circle at 85% 28%, rgba(191, 151, 65, 0.14), transparent 18%),
+    linear-gradient(180deg, #fff9ef 0%, #fffdf8 46%, #ffffff 100%);
+}
+
+.sectionShell::before,
+.sectionShell::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.sectionShell::before {
+  top: 84px;
+  right: -160px;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(216, 155, 0, 0.08), transparent 68%);
+}
+
+.sectionShell::after {
+  bottom: -120px;
+  left: -120px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(255, 213, 90, 0.12), transparent 72%);
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  display: grid;
+  gap: 26px;
+}
+
+.faqSection,
+.dualSection,
+.offerSection,
+.urgencySection {
+  position: relative;
+}
+
+.sectionHeader {
+  max-width: 720px;
+  margin-bottom: 22px;
+  display: grid;
+  gap: 12px;
+}
+
+.faqList {
+  display: grid;
+  gap: 14px;
+}
+
+.faqCard {
+  border: 1px solid rgba(185, 155, 104, 0.24);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow:
+    0 18px 36px rgba(72, 49, 10, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.faqCard:hover,
+.faqCardOpen {
+  transform: translateY(-2px);
+  border-color: rgba(191, 151, 65, 0.42);
+  box-shadow:
+    0 24px 44px rgba(72, 49, 10, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.faqButton {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 24px 26px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: #0f172a;
+}
+
+.faqNumber {
+  font-family: var(--font-family-display);
+  font-size: 24px;
+  color: #b87b00;
+}
+
+.faqQuestion {
+  font-family: var(--font-family-serif);
+  font-size: clamp(18px, 2vw, 23px);
+  line-height: 1.25;
+}
+
+.faqIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff4cf, #ffe49d);
+  color: #7a5700;
+  font-size: 26px;
+  line-height: 1;
+  box-shadow: 0 8px 18px rgba(250, 204, 21, 0.18);
+}
+
+.faqAnswerWrap {
+  padding: 0 26px 24px 72px;
+}
+
+.faqAnswer {
+  margin: 0;
+  max-width: 760px;
+  font-family: var(--font-family-serif);
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(51, 65, 85, 0.86);
+}
+
+.dualSection {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 18px;
+}
+
+.dualPanel,
+.offerCard,
+.urgencyCard {
+  border-radius: 34px;
+  border: 1px solid rgba(185, 155, 104, 0.24);
+  box-shadow:
+    0 22px 46px rgba(71, 52, 18, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+}
+
+.dualCopy {
+  padding: 34px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(252, 246, 233, 0.94)),
+    #fff;
+  display: grid;
+  align-content: center;
+  gap: 14px;
+}
+
+.dualActions {
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.86);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.actionCard {
+  min-height: 100%;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 24px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 244, 234, 0.94));
+}
+
+.actionCardAccent {
+  background:
+    radial-gradient(circle at top right, rgba(255, 213, 90, 0.24), transparent 32%),
+    linear-gradient(180deg, #fff6db 0%, #fff0c8 100%);
+}
+
+.actionTitle {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(24px, 2vw, 32px);
+  line-height: 1.04;
+  color: #0f172a;
+}
+
+.actionText {
+  margin: 0;
+  font-family: var(--font-family-serif);
+  font-size: 16px;
+  line-height: 1.68;
+  color: rgba(51, 65, 85, 0.84);
+}
+
+.primaryButton,
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 184px;
+  padding: 16px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-family: var(--font-family-sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover {
+  transform: translateY(-2px);
+}
+
+.primaryButton {
+  color: #0f172a;
+  background: linear-gradient(135deg, #ffd55a, #f4a300);
+  box-shadow: 0 14px 28px rgba(255, 191, 0, 0.25);
+}
+
+.secondaryButton {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(185, 155, 104, 0.34);
+  box-shadow: 0 14px 26px rgba(71, 52, 18, 0.08);
+}
+
+.offerCard {
+  padding: 30px 32px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 213, 90, 0.18), transparent 24%),
+    linear-gradient(135deg, rgba(255, 251, 241, 0.96), rgba(247, 239, 223, 0.94));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+}
+
+.offerContent {
+  display: grid;
+  gap: 12px;
+}
+
+.offerPoints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-top: 4px;
+}
+
+.offerPoint {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-family-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(51, 65, 85, 0.9);
+}
+
+.offerAction {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.urgencyCard {
+  padding: 18px;
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.97), rgba(46, 35, 7, 0.98)),
+    #111827;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+}
+
+.urgencyBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffe39a, #ffbf3b);
+  color: #312103;
+  font-family: var(--font-family-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.urgencyCopy {
+  display: grid;
+  gap: 10px;
+}
+
+.urgencyCopy :global(.ll-eyebrow),
+.urgencyCopy :global(.ll-headline),
+.urgencyCopy :global(.ll-intro) {
+  color: #fffdf8;
+}
+
+.urgencyCopy :global(.ll-eyebrow) {
+  color: rgba(255, 231, 181, 0.88);
+}
+
+.urgencyCopy :global(.ll-intro) {
+  color: rgba(255, 247, 232, 0.8);
+}
+
+.urgencyCard .primaryButton {
+  white-space: nowrap;
+}
+
+@media (max-width: 980px) {
+  .dualSection,
+  .offerCard,
+  .urgencyCard {
+    grid-template-columns: 1fr;
+  }
+
+  .dualActions {
+    grid-template-columns: 1fr;
+  }
+
+  .offerAction,
+  .urgencyCard .primaryButton {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionShell {
+    padding: 36px 16px 56px;
+  }
+
+  .faqButton {
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    padding: 20px;
+  }
+
+  .faqNumber {
+    grid-column: 1 / -1;
+    font-size: 18px;
+  }
+
+  .faqAnswerWrap {
+    padding: 0 20px 20px;
+  }
+
+  .dualCopy,
+  .dualActions,
+  .offerCard {
+    padding: 20px;
+  }
+
+  .actionCard {
+    padding: 20px;
+  }
+
+  .urgencyCard {
+    padding: 20px;
+  }
+
+  .urgencyBadge {
+    width: fit-content;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+}
